@@ -1,72 +1,50 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Ótica Vitaliz</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Botão para abrir o menu lateral -->
-  <button id="botao-menu" onclick="abrirMenu()">☰</button>
-
-  <!-- Menu lateral -->
-  <div id="menu-lateral" class="menu-lateral">
-    <button class="fechar-menu" onclick="fecharMenu()">✖</button>
-    <ul>
-      <li><a href="#">Início</a></li>
-      <li><a href="#">Produtos</a></li>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">Contato</a></li>
-      <li><a href="#">Ajuda</a></li>
-    </ul>
+  <!-- Aba lateral (mantida) -->
+  <div class="sidebar">
+    <!-- Conteúdo da aba lateral -->
+    <p>Aqui vai seu menu lateral futuramente 💙</p>
   </div>
 
-  <!-- Cabeçalho -->
-  <header>
-    <h1 class="logo">Vitaliz</h1>
-    <nav>
-      <ul>
-        <li><a href="#">Início</a></li>
-        <li><a href="#">Produtos</a></li>
-        <li><a href="#">Contato</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div class="main-content">
+    <header>
+      <h1 class="logo">Vitaliz</h1>
+      <nav>
+        <a href="inicio.html">Início</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="contato.html">Contato</a>
+      </nav>
+    </header>
 
-  <!-- Seção destaque -->
-  <section class="hero">
-    <h2>Enxergue com Estilo!</h2>
-    <p>Descubra as armações perfeitas para você.</p>
-    <a class="btn" href="#">Ver produtos</a>
-  </section>
+    <section class="produtos">
+      <h3>Nossas Armações</h3>
 
-  <!-- Produtos -->
-  <section class="produtos">
-    <h3>Nossas Armações</h3>
-    <div class="grid-produtos">
       <div class="produto">
-        <img src="img/armaçao2.png" alt="Armação Ideal">
-        <p>Armação Ideal <br>R$ 499,90</p>
+        <img src="img/armaçao1.png" alt="Armação 1">
+        <p>Armação Anahickman<br>R$ 499,90</p>
       </div>
-      <div class="produto">
-        <img src="img/armacao1.png" alt="Armação Dudalina">
-        <p>Armação Dudalina <br>R$ 568,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/armaçao3.png" alt="Armação Maria Valentina">
-        <p>Armação Maria Valentina <br>R$ 756,90</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Rodapé -->
-  <footer>
-    © 2025 Ótica Vitaliz - Todos os direitos reservados
-  </footer>
+      <div class="produto">
+        <img src="img/armacao2.png" alt="Armação 2">
+        <p>Armação Class Infantil<br>R$ 568,00</p>
+      </div>
 
-  <script src="script.js"></script>
+      <div class="produto">
+        <img src="img/armaçao3.png" alt="Armação 3">
+        <p>Armação Ray Ban<br>R$ 756,90</p>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 Ótica Vitaliz - Todos os direitos reservados
+    </footer>
+  </div>
 </body>
 </html>
