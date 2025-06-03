@@ -1,0 +1,120 @@
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  body {
+    display: flex;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #222;
+  }
+  
+  .sidebar {
+    width: 220px;
+    background-color: #002244;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+  
+  .sidebar-logo {
+    font-size: 32px;
+    color: #ffee00;
+    margin-bottom: 40px;
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .sidebar-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar-nav a:hover {
+    color: #ffee00;
+    transform: translateX(5px);
+  }
+  
+  .main-content {
+    margin-left: 220px;
+    padding: 40px 20px;
+    width: calc(100% - 220px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  
+  .produtos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .produtos h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #002244;
+  }
+  
+  .grid-produtos {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .produto {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .produto:hover {
+    transform: translateY(-5px);
+  }
+  
+  .produto img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .produto p {
+    margin: 0;
+    font-size: 18px;
+    color: #002244;
+    font-weight: bold;
+  }
+  
+  footer {
+    background-color: #002244;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 40px;
+  }
+  
