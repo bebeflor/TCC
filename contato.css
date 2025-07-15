@@ -1,0 +1,89 @@
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #002244;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffee00;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.contato h2 {
+  font-size: 32px;
+  color: #002244;
+}
+
+.contato p {
+  margin-bottom: 30px;
+  font-size: 18px;
+}
+
+.icones-contato {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.contato-card {
+  width: 180px;
+  height: 180px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #002244;
+  font-size: 18px;
+  text-decoration: none;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.contato-card i {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.contato-card:hover {
+  transform: scale(1.05);
+  background-color: #ffee00;
+  color: #002244;
+}
+
+footer {
+  background-color: #002244;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}

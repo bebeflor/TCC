@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #002244;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffee00;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.relogios {
+  text-align: center;
+}
+
+.relogios h2 {
+  color: #002244;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  max-width: 1000px;
+  padding: 10px;
+}
+
+.carousel img {
+  width: 100px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  transition: transform 0.5s ease;
+}
+
+.arrow {
+  font-size: 30px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #002244;
+  transition: color 0.3s ease;
+}
+
+.arrow:hover {
+  color: #ffee00;
+}
+footer {
+  background-color: #002244;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}

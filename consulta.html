@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta Ocular - Vitaliz</title>
+  <link rel="stylesheet" href="consulta.css">
+</head>
+<body>
+
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+     <nav class="sidebar-nav">
+        <a href="cadastro.html">Cadastro</a>
+        <a href="inicio.html">Início</a>
+        <a href="oculos-fem.html">Moda Feminina</a>
+        <a href="oculos-masc.html">Moda Masculina</a>
+        <a href="oculos-infantil.html">Moda Infantil</a>
+        <a href="consulta.html">Exame de vista</a>
+        <a href="relogios.html">Relógios</a>
+        <a href="contato.html">Contato</a>
+    </nav>
+
+    </nav>
+  </header>
+
+  <main>
+    <section class="consulta">
+      <h2>Agende seu Exame de vista</h2>
+      <p>Selecione uma quarta-feira e um horário:</p>
+
+      <form onsubmit="confirmarAgendamento(event)">
+        <label for="data">Escolha a data:</label>
+        <input type="date" id="data" name="data" required>
+
+        <label for="horario">Escolha o horário:</label>
+        <select id="horario" name="horario" required>
+          <option value="">Selecione o horário</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+          <option value="17:00">17:00</option>
+          <option value="18:00">18:00</option>
+        </select>
+
+        <button type="submit">Agendar Consulta</button>
+      </form>
+
+      <div id="confirmacao" class="confirmacao"></div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+  <script>
+    const dataInput = document.getElementById('data');
+
+    dataInput.addEventListener('input', function() {
+      const dataSelecionada = new Date(this.value);
+      const diaSemana = dataSelecionada.getUTCDay(); // 3 = quarta-feira
+
+      if (diaSemana !== 3) {
+        alert('Só é possível agendar para quartas-feiras!');
+        this.value = '';
+      }
+    });
+
+    function confirmarAgendamento(event) {
+      event.preventDefault();
+      const data = document.getElementById('data').value;
+      const horario = document.getElementById('horario').value;
+
+      if (data && horario) {
+        document.getElementById('confirmacao').innerHTML = `
+          <p><strong>Consulta marcada para:</strong> ${data} às ${horario}</p>
+        `;
+      }
+    }
+  </script>
+
+</body>
+</html>

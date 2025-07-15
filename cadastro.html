@@ -10,13 +10,17 @@
 <body>
   <div class="container">
     <h1>Vitaliz</h1>
-    <form onsubmit="cadastrarUsuario(event)">
-      <input type="text" placeholder="Nome completo" required />
-      <input type="email" placeholder="E-mail" required />
-      <input type="password" placeholder="Senha" required />
-      <button type="submit">Cadastrar</button>
-    </form>
-    <a href="inicio.html" class="link">Já sou cadastrado</a>
+  <form id="form-cadastro">
+  <input type="text" name="nome" placeholder="Nome completo" required />
+  <input type="email" name="email" placeholder="E-mail" required />
+  <input type="password" name="senha" placeholder="Senha" required />
+  <button type="submit">Cadastrar</button>
+</form>
+
+<a href="inicio.html" class="link">Já sou cadastrado</a>
+
+<script src="js/cadastro.js"></script>
+
   </div>
 
   <script>
@@ -27,4 +31,5 @@
     }
   </script>
 </body>
+
 </html>

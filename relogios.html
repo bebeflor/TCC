@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relógios - Vitaliz</title>
+  <link rel="stylesheet" href="relogios.css">
+</head>
+<body>
+
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+    <nav>
+ <nav class="sidebar-nav">
+  <a href="cadastro.html">Cadastro</a>
+  <a href="inicio.html">Início</a>
+  <a href="oculos-fem.html">Moda Feminina</a>
+  <a href="oculos-masc.html">Moda Masculina</a>
+  <a href="oculos-infantil.html">Moda Infantil</a>
+  <a href="consulta.html">Exame de vista</a>
+  <a href="relogios.html">Relógios</a>
+  <a href="contato.html">Contato</a>
+</nav>
+
+    </nav>
+  </header>
+
+  <main>
+    <section class="relogios">
+      <h2>Nossos Relógios</h2>
+
+      <div class="carousel-container">
+        <button class="arrow" id="prev">&#8592;</button>
+
+        <div class="carousel" id="carousel">
+          <img src="img/relogio1.png" alt="Relógio Condor - R$ 399,00">
+          <img src="img/relogio2.png" alt="Relógio Mormaii - R$ 529,00">
+          <img src="img/relogio3.png" alt="Relógio Mormaii Dourado - R$ 610,00">
+          <img src="img/relogio4.png" alt="Relógio Technos - R$ 490,00">
+          <img src="img/relogio5.png" alt="Relógio Azul Mormaii - R$ 479,00">
+          <img src="img/relogio6.png" alt="Relógio Condor Feminino - R$ 459,00">
+          <img src="img/relogio7.jpeg" alt="Relógio Smartwatch Masculino - R$ 899,99">
+          <img src="img/relogio8.jpeg" alt="Relógio Technos Masculino - R$ 759,90">
+          <img src="img/relogio9.jpeg" alt="Relógio Euro Feminino - R$ 850,00">
+          <img src="img/relogio10.jpeg" alt="Relógio Condor Masculino - R$ 650,00">
+        </div>
+
+        <button class="arrow" id="next">&#8594;</button>
+      </div>
+
+      <div id="info" class="info-rel"></div>
+    </section>
+  </main>
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const carousel = document.getElementById('carousel');
+      const nextBtn = document.getElementById('next');
+      const prevBtn = document.getElementById('prev');
+      const infoBox = document.getElementById('info');
+
+      const scrollStep = 320;
+
+      nextBtn.addEventListener('click', () => {
+        carousel.scrollBy({ left: scrollStep, behavior: 'smooth' });
+      });
+
+      prevBtn.addEventListener('click', () => {
+        carousel.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+      });
+
+      const imagens = carousel.querySelectorAll('img');
+      imagens.forEach(img => {
+        img.addEventListener('click', () => {
+          infoBox.innerText = img.alt;
+        });
+      });
+    });
+  </script>
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+</body>
+</html>

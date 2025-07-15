@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+header {
+  background-color: #001a33;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffee00;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+main {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.produtos h2 {
+  color: #001a33;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.grid-produtos {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.produto {
+  width: 250px;
+}
+
+.produto img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.produto p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #001a33;
+}
+
+footer {
+  background-color: #001a33;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
