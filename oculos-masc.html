@@ -20,106 +20,79 @@
       <a href="contato.html">Contato</a>
     </nav>
   </header>
-<main>
-  <section class="produtos">
-    <h2>Armações Masculinas</h2>
 
-    <!-- Bloco 1 -->
-    <div class="grid-produtos">
-      <div class="produto">
-        <img src="img/masc1.png" alt="Armação Masculina 1">
-        <p>Armação Ideal</p>
-        <p>R$ 370,00</p>
+  <main>
+    <section class="produtos">
+      <h2>Armações Masculinas</h2>
+
+      <div class="grid-produtos">
+        <div class="produto"><img src="img/masc1.png"><p class="titulo">Armação Ideal</p><p class="preco">R$ 370,00</p></div>
+        <div class="produto"><img src="img/masc2.png"><p class="titulo">Óculos de sol Atitude</p><p class="preco">R$ 399,00</p></div>
+        <div class="produto"><img src="img/masc9.png"><p class="titulo">Armação Pierre Cardin</p><p class="preco">R$ 690,00</p></div>
+        <div class="produto"><img src="img/masc4.png"><p class="titulo">Óculos de sol Mormaii</p><p class="preco">R$ 499,99</p></div>
+        <div class="produto"><img src="img/masc8,.jpeg"><p class="titulo">Armação Ideal</p><p class="preco">R$ 350,90</p></div>
+        <div class="produto"><img src="img/masc5.png"><p class="titulo">Óculos de sol Mormaii</p><p class="preco">R$ 450,00</p></div>
+        <div class="produto"><img src="img/masc6.png"><p class="titulo">Armação Atitude</p><p class="preco">R$ 490,00</p></div>
+        <div class="produto"><img src="img/masc7.png"><p class="titulo">Óculos de sol Class</p><p class="preco">R$ 550,00</p></div>
+        <div class="produto"><img src="img/masc3.png"><p class="titulo">Armação Pierre Cardin</p><p class="preco">R$ 660,00</p></div>
+        <div class="produto"><img src="img/masc10..jpeg"><p class="titulo">Óculos de sol Ideal</p><p class="preco">R$ 620,00</p></div>
+        <div class="produto"><img src="img/masc11.png"><p class="titulo">Armação Class</p><p class="preco">R$ 480,00</p></div>
+        <div class="produto"><img src="img/masc12..jpeg"><p class="titulo">Óculos de sol Urban Style</p><p class="preco">R$ 510,00</p></div>
+        <div class="produto"><img src="img/masc13.jpeg"><p class="titulo">Óculos de sol Ideal</p><p class="preco">R$ 620,00</p></div>
+        <div class="produto"><img src="img/masc17.jpeg"><p class="titulo">Óculos de sol Mormaii</p><p class="preco">R$ 480,00</p></div>
+        <div class="produto"><img src="img/masc15.jpeg"><p class="titulo">Óculos de sol Urban Style</p><p class="preco">R$ 510,00</p></div>
+         <div class="produto"><img src="img/masc16.png"><p class="titulo">Óculos de sol Urban Style</p><p class="preco">R$ 510,00</p></div>
       </div>
-      <div class="produto">
-        <img src="img/masc2.png" alt="Armação Masculina 2">
-        <p>Óculos de sol Atitude</p>
-        <p>R$ 399,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc3.png" alt="Armação Masculina 3">
-        <p>Armação Pierre Cardin</p>
-        <p>R$ 690,00</p>
-      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeBtn" class="close">&times;</span>
+      <img id="modal-img" src="" alt="Produto ampliado">
+      <p id="modal-title"></p>
+      <p id="modal-price"></p>
     </div>
+  </div>
 
-    <!-- Bloco 2 -->
-    <div class="grid-produtos">
-      <div class="produto">
-        <img src="img/masc4.png" alt="Armação Masculina 4">
-        <p>Óculos de sol Mormaii</p>
-        <p>R$ 499,99</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc5.png" alt="Armação Masculina 5">
-        <p>Armação Ideal</p>
-        <p>R$ 350,90</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc6.png" alt="Armação Masculina 6">
-        <p>Óculos de sol Mormaii</p>
-        <p>R$ 450,00</p>
-      </div>
-    </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const produtos = document.querySelectorAll(".produto");
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalTitle = document.getElementById("modal-title");
+      const modalPrice = document.getElementById("modal-price");
+      const closeBtn = document.getElementById("closeBtn");
 
-    <!-- Bloco 3 -->
-    <div class="grid-produtos">
-      <div class="produto">
-        <img src="img/masc7.png" alt="Armação Masculina 7">
-        <p>Armação Atitude</p>
-        <p>R$ 490,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc8,.jpeg" alt="Armação Masculina 8">
-        <p>Óculos de sol Class</p>
-        <p>R$ 550,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc9.png" alt="Armação Masculina 9">
-        <p>Armação Pierre Cardin</p>
-        <p>R$ 660,00</p>
-      </div>
-    </div>
+      produtos.forEach(produto => {
+        produto.addEventListener("click", () => {
+          const img = produto.querySelector("img").src;
+          const titulo = produto.querySelector(".titulo").innerText;
+          const preco = produto.querySelector(".preco").innerText;
 
-    <!-- Bloco 4 -->
-    <div class="grid-produtos">
-      <div class="produto">
-        <img src="img/masc10..jpeg" alt="Armação Masculina 10">
-        <p>Óculos de sol Ideal</p>
-        <p>R$ 620,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc11.png" alt="Armação Masculina 11">
-        <p>Armação Class</p>
-        <p>R$ 480,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc12..jpeg" alt="Armação Masculina 12">
-        <p>Óculos de sol Urban Style</p>
-        <p>R$ 510,00</p>
-      </div>
+          modalImg.src = img;
+          modalTitle.innerText = titulo;
+          modalPrice.innerText = preco;
+          modal.classList.remove("hidden");
+        });
+      });
 
-       <!-- Bloco 5-->
-    <div class="grid-produtos">
-      <div class="produto">
-        <img src="img/masc13.jpeg" alt="Armação Masculina 13">
-        <p>Óculos de sol Ideal</p>
-        <p>R$ 620,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc14.png" alt="Armação Masculina 14">
-        <p>Armação Class</p>
-        <p>R$ 480,00</p>
-      </div>
-      <div class="produto">
-        <img src="img/masc15.jpeg" alt="Armação Masculina 15">
-        <p>Óculos de sol Urban Style</p>
-        <p>R$ 510,00</p>
-      </div>
-    </div>
-  </section>
-</main>
+      closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
 
-<footer>
-  © 2025 Ótica Vitaliz - Todos os direitos reservados
-</footer>
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

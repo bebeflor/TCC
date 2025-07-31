@@ -1,108 +1,349 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* GERAIS E FONTES */
+body {
     font-family: 'Segoe UI', sans-serif;
-  }
-  
-  body {
+    margin: 0;
     display: flex;
-    height: 100vh;
-    background-color: #f0f2f5;
-  }
-  
-  /* Sidebar */
-  .sidebar {
-    width: 220px;
-    background-color: #002244;
-    color: white;
+    min-height: 100vh; /* Garante que o corpo ocupa toda a altura da viewport */
+    background-color: #eeeeee; /* Fundo completamente branco */
+    overflow-x: hidden; /* Evita scroll horizontal indesejado */
+}
+
+/* BARRA LATERAL */
+.sidebar {
+    width: 250px;
+    background-color: #334455; /* Cor mais escura para a barra lateral */
+    color: #fff;
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-  
-  .sidebar-logo {
-    font-size: 32px;
-    color: #ffee00;
+    border-right: 2px solid #556677; /* Borda sutil */
+}
+
+.sidebar-logo {
+    font-size: 2.5em;
+    font-weight: 700;
     margin-bottom: 40px;
-  }
-  
-  .sidebar-nav {
+    color:  #ffd700; /* ANTES: #fcfcfc; -> AGORA: Seu amarelo vibrante! */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+.sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-  }
-  
-  .sidebar-nav a {
-    color: white;
+    width: 100%;
+}
+
+
+.sidebar-nav a {
+     color: #f7f6f5;; 
     text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    transition: all 0.3s ease;
-  }
-  
-  .sidebar-nav a:hover {
-    color: #ffee00;
-    transform: translateX(5px);
-  }
-  
-  /* Conteúdo principal */
-  .hero {
-    margin-left: 220px;
+    padding: 15px 20px;
+    margin: 5px 0;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0; /* Começa invisível para a animação */
+    transform: translateX(-30px); /* Começa ligeiramente à esquerda */
+}
+
+.sidebar-nav a:hover {
+    background-color: #556677;
+    transform: translateX(0);
+    color: #fcf82f;
+    box-shadow: 0 0 15px rgba(168, 218, 220, 0.5); /* Efeito de brilho no hover */
+}
+
+/* Animação dos links da barra lateral */
+@keyframes slideInLink {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.sidebar-nav a.mostrar-link {
+    animation: slideInLink 0.5s ease-out forwards;
+}
+
+
+/* CONTEÚDO PRINCIPAL (HERO SECTION) */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0,2rem; /* espaço entre texto e imagem */
+  padding: 2rem;
+}
+
+.hero-text {
+    max-width: 600px;
+    text-align: left;
+    z-index: 2; /* Garante que o texto fique acima da imagem se houver sobreposição */
+    opacity: 0; /* Inicia invisível para a animação */
+    transform: translateY(20px); /* Inicia ligeiramente para baixo */
+}
+
+/* Animação para o contêiner do texto (fade-in e slide-up) */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-text.mostrar {
+    animation: fadeInSlideUp 0.8s ease-out forwards; /* Anima o contêiner completo */
+}
+
+/* Animação para o título (deslizando da esquerda) */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-text h2 {
+    font-size: 3em; /* Diminuído para 3em (era 3.5em) */
+    color: #2c3e50; /* Cor mais escura para contraste */
+    line-height: 1.2;
+    margin-bottom: 20px;
+    font-weight: 700;
+    opacity: 0; /* Inicia invisível */
+    transform: translateX(-50px); /* Começa fora da tela à esquerda */
+}
+
+.hero-text h2.mostrar-titulo {
+    animation: slideInLeft 1s ease-out forwards;
+    animation-delay: 0.5s; /* Começa depois de um pequeno atraso */
+}
+
+
+/* Animação para o subtítulo (deslizando da direita) */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-text .hero-subtitle {
+    font-size: 1.8em; /* Aumenta o tamanho do subtítulo */
+    color: #555;
+    margin-bottom: 30px;
+    font-style: italic; /* Adiciona um toque de estilo */
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+.hero-text .hero-subtitle.mostrar-subtitulo {
+    animation: slideInRight 1s ease-out forwards;
+    animation-delay: 1s; /* Atraso maior para aparecer depois do título */
+}
+
+.hero-text .destaque {
+    color: #ffd700; /* Cor amarela para o destaque "óculos" (Goldenrod) */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Botão "Comprar agora" */
+.botao {
+    display: inline-block;
+    background-color: #457b9d; /* Um azul mais elegante */
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 30px; /* Mais arredondado */
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais suave */
+    opacity: 0; /* Inicia invisível */
+    transform: translateY(20px); /* Inicia ligeiramente para baixo */
+}
+
+.botao:hover {
+    background-color: #1d3557; /* Azul mais escuro no hover */
+    transform: translateY(-5px) scale(1.05); /* Pequeno salto e aumento */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Animação para o botão */
+@keyframes fadeInScaleUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.botao.mostrar-botao {
+    animation: fadeInScaleUp 0.6s ease-out forwards;
+    animation-delay: 1.5s; /* Atraso para aparecer por último */
+}
+
+/* IMAGEM HERO */
+.hero-img {
+    position: relative;
+    width: 800px;
+    height: 600px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 60px;
-    width: calc(100% - 220px);
-    gap: 60px;
-  }
-  
-  .hero-text h2 {
-    font-size: 36px;
-    color: #000;
-    margin-bottom: 20px;
-    max-width: 500px;
-  }
-  
-  .destaque {
-    color: #ffee00;
-    font-weight: bold;
-  }
-  
-  .hero-text p {
-    font-size: 18px;
-    color: #444;
-    margin-bottom: 30px;
-  }
-  
-  .botao {
-    background-color: #002244;
-    color: white;
-    padding: 14px 28px;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background 0.3s ease;
-  }
-  
-  .botao:hover {
-    background-color: #001a33;
-  }
-  
-  .hero-img img {
-    width: 150%;
-    max-width: 700px;
-    border-radius: 30px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  }
-  footer {
-  background-color: #002244;
-  color: white;
-  text-align: center;
-  padding: 20px;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50px;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.25);
+   
+}
+
+.hero-img img {
+    max-width: 400%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+
+/* Animação para a imagem */
+@keyframes zoomInFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.hero-img img.mostrar-imagem {
+    animation: zoomInFadeIn 1s ease-out forwards;
+    animation-delay: 0.7s; /* Atraso para aparecer depois do título */
+}
+
+
+/* RESPONSIVIDADE (PARA TELAS MENORES) */
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column; /* Empilha texto e imagem em telas menores */
+        text-align: center;
+        gap: 30px;
+        padding: 30px;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-text h2 {
+        font-size: 2.2em; /* Ajuste para telas menores */
+    }
+
+    .hero-text .hero-subtitle {
+        font-size: 1.2em; /* Ajuste para telas menores */
+    }
+
+    .hero-img {
+        width: 700px; /* Ajuste para telas menores */
+        height: auto;
+        max-height: 400px; /* Limita a altura em telas menores */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        flex-direction: row; /* Coloca a sidebar em linha */
+        flex-wrap: wrap; /* Permite que os itens quebrem linha */
+        justify-content: center;
+        margin-bottom: 20px;
+        border-right: none;
+        border-bottom: 2px solid #556677;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 10px;
+        font-size: 2em;
+        width: 100%; /* Garante que o logo ocupe a linha inteira */
+    }
+
+    .sidebar-nav {
+        flex-direction: row; /* Links em linha */
+        flex-wrap: wrap; /* Permite que os links quebrem linha */
+        justify-content: center;
+    }
+
+    .sidebar-nav a {
+        padding: 10px 15px;
+        font-size: 1em;
+        margin: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-nav {
+        flex-direction: column; /* Volta para coluna em telas muito pequenas */
+    }
+}
+
+/* Efeito de brilho sutil no body (opcional, para um toque extra) */
+/* Removido o background-color do body::before/after para não interferir com o fundo branco */
+/* Mas você pode reativá-los se quiser um efeito sutil por cima do branco */
+
+/*
+body::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.1), transparent);
+    animation: floatLight 10s infinite alternate ease-in-out;
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.1), transparent);
+    animation: floatLight 12s infinite alternate-reverse ease-in-out;
+    z-index: 0;
+}
+
+@keyframes floatLight {
+    0% { transform: translate(0, 0); opacity: 0.7; }
+    50% { transform: translate(20px, 30px); opacity: 0.9; }
+    100% { transform: translate(0, 0); opacity: 0.7; }
 }

@@ -1,42 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Início - Vitaliz</title>
-  <link rel="stylesheet" href="inicio.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Início - Vitaliz</title>
+    <link rel="stylesheet" href="inicio.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <aside class="sidebar">
-    <div class="sidebar-content">
-      <h1 class="sidebar-logo">Vitaliz</h1>
-      <nav class="sidebar-nav">
+
+    <aside class="sidebar">
+        <h1 class="sidebar-logo">Vitaliz</h1>
         <nav class="sidebar-nav">
-         <a href="cadastro.html">Cadastro</a>
-         <a href="inicio.html">Início</a>
-         <a href="oculos-fem.html">Moda Feminina</a>
-          <a href="oculos-masc.html">Moda Masculina</a>
-          <a href="oculos-infantil.html">Moda Infantil</a>
-         <a href="consulta.html">Exame de vista</a>
-         <a href="relogios.html">Relógios</a>
-         <a href="contato.html">Contato</a>
-</nav>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="inicio.html">Início</a>
+            <a href="oculos-fem.html">Moda Feminina</a>
+            <a href="oculos-masc.html">Moda Masculina</a>
+            <a href="oculos-infantil.html">Moda Infantil</a>
+            <a href="consulta.html">Exame de vista</a>
+            <a href="relogios.html">Relógios</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+    </aside>
 
-</nav>
+    <main class="hero">
+        <div class="hero-text">
+            <h2>Não espere para amanhã o <span class="destaque">óculos</span> que você pode comprar hoje!</h2>
+            <p class="hero-subtitle">Estilo em cada detalhe.</p>
+            <a href="oculos-fem.html" class="botao">Comprar agora</a>
+        </div>
+        <div class="hero-img">
+            <img src="img/inicio.png" alt="Imagem de uma vendedora da Vitaliz com sacola de óculos">
+        </div>
+    </main>
 
-      </nav>
-    </div>
-  </aside>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Exibe o container de texto principal
+            document.querySelector(".hero-text").classList.add("mostrar"); // <- ESTA LINHA É ESSENCIAL
 
-  <main class="hero">
-    <div class="hero-text">
-      <h2>Não Espere para amanhã o <span class="destaque">óculos</span> que você pode comprar hoje!</h2>
-      <p>Estilo em cada detalhe.</p>
-      <a href="oculos-fem.html" class="botao">Comprar agora</a>
-    </div>
-    <div class="hero-img">
-      <img src="img/inicio.png" alt="Imagem de uma vendedora da Vitaliz com sacola de óculos">
-    </div>
-  </main>
+            // Anima título e subtítulo
+            document.querySelector(".hero-text h2").classList.add("mostrar-titulo");
+            document.querySelector(".hero-text .hero-subtitle").classList.add("mostrar-subtitulo");
+            document.querySelector(".hero-text").classList.add("mostrar");
+
+
+            // Links da barra lateral (com animação em sequência)
+            const links = document.querySelectorAll(".sidebar-nav a");
+            links.forEach((link, index) => {
+                setTimeout(() => {
+                    link.classList.add("mostrar-link");
+                }, 150 * index);
+            });
+
+            // Botão "Comprar agora"
+            const botao = document.querySelector(".botao");
+            setTimeout(() => {
+                botao.classList.add("mostrar-botao");
+            }, 800);
+
+            // Imagem
+            document.querySelector(".hero-img img").classList.add("mostrar-imagem");
+        });
+    </script>
+
 </body>
 </html>

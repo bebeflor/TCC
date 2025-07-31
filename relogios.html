@@ -1,84 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Relógios - Vitaliz</title>
-  <link rel="stylesheet" href="relogios.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógios - Vitaliz</title>
+    <link rel="stylesheet" href="relogios.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <h1 class="logo">Vitaliz</h1>
+        <nav class="sidebar-nav">
+            <a href="cadastro.html">Cadastro</a>
+            <a href="inicio.html">Início</a>
+            <a href="oculos-fem.html">Moda Feminina</a>
+            <a href="oculos-masc.html">Moda Masculina</a>
+            <a href="oculos-infantil.html">Moda Infantil</a>
+            <a href="consulta.html">Exame de vista</a>
+            <a href="relogios.html">Relógios</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+    </header>
 
-  <header>
-    <h1 class="logo">Vitaliz</h1>
-    <nav>
- <nav class="sidebar-nav">
-  <a href="cadastro.html">Cadastro</a>
-  <a href="inicio.html">Início</a>
-  <a href="oculos-fem.html">Moda Feminina</a>
-  <a href="oculos-masc.html">Moda Masculina</a>
-  <a href="oculos-infantil.html">Moda Infantil</a>
-  <a href="consulta.html">Exame de vista</a>
-  <a href="relogios.html">Relógios</a>
-  <a href="contato.html">Contato</a>
-</nav>
+    <main>
+        <section class="relogios">
+            <h2>Nossos Relógios</h2>
 
-    </nav>
-  </header>
+            <div class="carousel-wrapper">
+                <button class="arrow left" id="prevBtn">&#10094;</button>
 
-  <main>
-    <section class="relogios">
-      <h2>Nossos Relógios</h2>
+                <div class="carousel" id="carousel">
+                    <div class="card"><img src="img/relogio1.png" alt="Technos - R$ 490,00"><p>Condor dourado- R$ 590,00</p></div>
+                    <div class="card"><img src="img/relogio2.png" alt="Azul Mormaii - R$ 479,00"><p> Mormaii preto- R$ 479,00</p></div>
+                    <div class="card"><img src="img/relogio3.png" alt="Condor Feminino - R$ 459,00"><p>Mormaii dourado - R$ 699,90</p></div>
+                    <div class="card"><img src="img/relogio4.png" alt="Smartwatch - R$ 899,99"><p>Technos unisex- R$ 599,99</p></div>
+                    <div class="card"><img src="img/relogio5.png" alt="Technos Masculino - R$ 759,90"><p>Mormaii masculio azul- R$ 759,90</p></div>
+                    <div class="card"><img src="img/relogio6.png" alt="Euro Feminino - R$ 850,00"><p>Condor Feminino - R$ 850,00</p></div>
+                    <div class="card"><img src="img/relogio7.jpeg" alt="Condor Masculino - R$ 650,00"><p>Apple Watch unisex - R$ 1.299,00</p></div>
+                    <div class="card"><img src="img/relogio8.jpeg" alt="Mormaii Dourado - R$ 610,00"><p>  Condor masculino - R$ 710,00</p></div>
+                </div>
 
-      <div class="carousel-container">
-        <button class="arrow" id="prev">&#8592;</button>
+                <button class="arrow right" id="nextBtn">&#10095;</button>
 
-        <div class="carousel" id="carousel">
-          <img src="img/relogio1.png" alt="Relógio Condor - R$ 399,00">
-          <img src="img/relogio2.png" alt="Relógio Mormaii - R$ 529,00">
-          <img src="img/relogio3.png" alt="Relógio Mormaii Dourado - R$ 610,00">
-          <img src="img/relogio4.png" alt="Relógio Technos - R$ 490,00">
-          <img src="img/relogio5.png" alt="Relógio Azul Mormaii - R$ 479,00">
-          <img src="img/relogio6.png" alt="Relógio Condor Feminino - R$ 459,00">
-          <img src="img/relogio7.jpeg" alt="Relógio Smartwatch Masculino - R$ 899,99">
-          <img src="img/relogio8.jpeg" alt="Relógio Technos Masculino - R$ 759,90">
-          <img src="img/relogio9.jpeg" alt="Relógio Euro Feminino - R$ 850,00">
-          <img src="img/relogio10.jpeg" alt="Relógio Condor Masculino - R$ 650,00">
-        </div>
+                <div class="carousel-arrows-mobile">
+                    <button class="arrow left mobile-arrow" id="prevBtnMobile">&#10094;</button>
+                    <button class="arrow right mobile-arrow" id="nextBtnMobile">&#10095;</button>
+                </div>
+            </div>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </section>
+    </main>
 
-        <button class="arrow" id="next">&#8594;</button>
-      </div>
+    <footer>
+        © 2025 Ótica Vitaliz - Todos os direitos reservados
+    </footer>
 
-      <div id="info" class="info-rel"></div>
-    </section>
-  </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
 
+            // Se você adicionou as setas mobile no HTML
+            const prevBtnMobile = document.getElementById('prevBtnMobile');
+            const nextBtnMobile = document.getElementById('nextBtnMobile');
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const carousel = document.getElementById('carousel');
-      const nextBtn = document.getElementById('next');
-      const prevBtn = document.getElementById('prev');
-      const infoBox = document.getElementById('info');
+            // Pega todos os cards dentro do carrossel
+            const cards = Array.from(carousel.querySelectorAll('.card'));
+            
+            // Função para atualizar a visibilidade das setas e dos indicadores
+            function updateCarouselState() {
+                const carouselScrollLeft = carousel.scrollLeft;
+                const carouselScrollWidth = carousel.scrollWidth;
+                const carouselClientWidth = carousel.clientWidth;
 
-      const scrollStep = 320;
+                // Desabilita a seta "anterior" se estiver no começo
+                prevBtn.disabled = carouselScrollLeft === 0;
+                if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft === 0; // Para mobile
 
-      nextBtn.addEventListener('click', () => {
-        carousel.scrollBy({ left: scrollStep, behavior: 'smooth' });
-      });
+                // Desabilita a seta "próximo" se estiver no final
+                // Usa uma pequena margem de erro para evitar problemas de arredondamento
+                nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+                if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5); // Para mobile
 
-      prevBtn.addEventListener('click', () => {
-        carousel.scrollBy({ left: -scrollStep, behavior: 'smooth' });
-      });
+                // Atualiza os indicadores
+                updateIndicators();
+            }
 
-      const imagens = carousel.querySelectorAll('img');
-      imagens.forEach(img => {
-        img.addEventListener('click', () => {
-          infoBox.innerText = img.alt;
+            // Função para calcular o quanto scrollar por clique
+            function getScrollAmount() {
+                // Tenta encontrar o primeiro card para obter sua largura + gap
+                if (cards.length > 0) {
+                    const cardWidth = cards[0].offsetWidth;
+                    const computedStyle = window.getComputedStyle(carousel);
+                    const gap = parseFloat(computedStyle.gap); // Pega o valor de 'gap' do CSS
+                    return cardWidth + gap;
+                }
+                return carousel.offsetWidth; // Fallback se não encontrar cards
+            }
+
+            // Event Listener para o botão "Anterior"
+            prevBtn.addEventListener('click', () => {
+                const scrollAmount = getScrollAmount();
+                carousel.scrollLeft -= scrollAmount;
+                // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
+            });
+
+            // Event Listener para o botão "Próximo"
+            nextBtn.addEventListener('click', () => {
+                const scrollAmount = getScrollAmount();
+                carousel.scrollLeft += scrollAmount;
+                // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
+            });
+
+            // Se houver setas mobile, adicione os event listeners para elas também
+            if (prevBtnMobile && nextBtnMobile) {
+                prevBtnMobile.addEventListener('click', () => {
+                    const scrollAmount = getScrollAmount();
+                    carousel.scrollLeft -= scrollAmount;
+                    // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
+                });
+
+                nextBtnMobile.addEventListener('click', () => {
+                    const scrollAmount = getScrollAmount();
+                    carousel.scrollLeft += scrollAmount;
+                    // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
+                });
+            }
+
+            // Lógica para os indicadores (as "bolinhas")
+            function createIndicators() {
+                indicatorsContainer.innerHTML = ''; // Limpa os indicadores existentes
+                // Verifica se há cards antes de tentar calcular cardsPerView
+                if (cards.length === 0) return; 
+
+                // Garante que o getScrollAmount seja válido antes de usar
+                const scrollAmountBase = getScrollAmount();
+                if (scrollAmountBase === 0) return; // Evita divisão por zero
+
+                const cardsPerView = Math.floor(carousel.clientWidth / scrollAmountBase);
+                
+                // Calcula o número de "páginas" de cards
+                const numPages = Math.ceil(cards.length / cardsPerView);
+
+                for (let i = 0; i < numPages; i++) {
+                    const indicator = document.createElement('button');
+                    indicator.classList.add('indicator');
+                    indicator.dataset.page = i; // Armazena a página que o indicador representa
+                    indicatorsContainer.appendChild(indicator);
+
+                    indicator.addEventListener('click', (event) => {
+                        const pageIndex = parseInt(event.target.dataset.page);
+                        // Calcula a posição de scroll para a página clicada
+                        carousel.scrollTo({
+                            left: pageIndex * scrollAmountBase * cardsPerView,
+                            behavior: 'smooth'
+                        });
+                        // A atualização do estado é feita pelo evento 'scroll' do carrossel
+                    });
+                }
+            }
+
+            function updateIndicators() {
+                // Se o container de indicadores não tiver filhos, recrie-os
+                if (!indicatorsContainer.children.length && cards.length > 0) { // Adicionado cards.length > 0 para evitar criar indicadores vazios
+                    createIndicators();
+                }
+
+                if (cards.length === 0) return; // Se não houver cards, não atualiza indicadores
+
+                const scrollAmountBase = getScrollAmount();
+                if (scrollAmountBase === 0) return;
+
+                const cardsPerView = Math.floor(carousel.clientWidth / scrollAmountBase);
+                // Calcula a página atual baseada na posição do scroll
+                // Adiciona uma pequena margem de erro para melhorar a detecção da página
+                const currentPage = Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView));
+                
+                Array.from(indicatorsContainer.children).forEach((indicator, index) => {
+                    if (index === currentPage) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+
+            // Atualiza o estado do carrossel quando ele scrolla (manual ou por seta)
+            carousel.addEventListener('scroll', () => {
+                updateCarouselState();
+            });
+
+            // Inicializa o carrossel e os indicadores ao carregar a página e redimensionar
+            window.addEventListener('resize', () => {
+                createIndicators(); // Recria indicadores para ajustar-se à nova largura
+                updateCarouselState();
+            });
+
+            // Chama a função inicial ao carregar a página
+            createIndicators(); // Cria os indicadores pela primeira vez
+            updateCarouselState(); // Define o estado inicial das setas e indicadores
         });
-      });
-    });
-  </script>
-  <footer>
-    © 2025 Ótica Vitaliz - Todos os direitos reservados
-  </footer>
+    </script>
 </body>
 </html>
