@@ -112,17 +112,20 @@
       obs.value = `Pedido do produto: ${produto}${preco ? ' - ' + preco : ''}`;
     }
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const parcelasEl = document.getElementById('parcelas');
       const dados = {
         nome: form.nome.value.trim(),
         telefone: form.telefone.value.trim(),
         documento: form.documento.value.trim(),
         tipoPagamento: form.tipoPagamento.value,
-        parcelas: document.getElementById('parcelas') ? document.getElementById('parcelas').value : '1',
+        parcelas: parcelasEl ? parcelasEl.value : '1',
         endereco: form.endereco.value.trim(),
         observacoes: form.observacoes.value.trim(),
+        produtoTitulo: produto || null,
+        produtoPreco: preco || null,
         data: new Date().toISOString()
       };
 
@@ -132,14 +135,35 @@
         return;
       }
 
-      // salva no localStorage (substitua por envio para servidor quando disponível)
-      const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
-      pedidos.push(dados);
-      localStorage.setItem('pedidos', JSON.stringify(pedidos));
+      // Desabilita botão para evitar envios duplicados
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
 
-      // mostra confirmação
-      form.classList.add('hidden');
-      confirmacao.classList.remove('hidden');
+      // Tenta enviar ao servidor; se falhar, salva no localStorage como fallback
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        });
+
+        if (!res.ok) throw new Error('Erro no servidor');
+
+        // sucesso
+        form.classList.add('hidden');
+        confirmacao.classList.remove('hidden');
+      } catch (err) {
+        console.warn('Falha ao enviar para o servidor, salvando localmente:', err);
+        const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+        pedidos.push(dados);
+        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+        alert('Não foi possível enviar o pedido ao servidor. O pedido foi salvo localmente e será sincronizado quando houver conexão.');
+        form.classList.add('hidden');
+        confirmacao.classList.remove('hidden');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
     });
 
     // mostra parcelas quando aplicável
