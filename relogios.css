@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9; /* Fundo suave */
+    background-color: #fff !important; /* Fundo branco na página de relógios */
     color: #222;
     display: flex;
     flex-direction: column;

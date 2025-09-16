@@ -29,6 +29,8 @@
             </h2>
             <p class="hero-subtitle">Estilo em cada detalhe.</p>
             <a href="oculos-fem.html" class="botao">Comprar agora</a>
+            <!-- Adicionado: botão Fazer pedido -->
+            <a href="pedido.html" class="botao" style="margin-left:12px;">Fazer pedido</a>
         </div>
         <div class="hero-image">
             <img src="img/armaçao1.png" alt="Óculos">
@@ -51,6 +53,14 @@
       const botao = document.querySelector(".botao");
       setTimeout(() => {
         botao.classList.add("mostrar-botao");
+        botao.style.animation = "fadeInUp 0.6s ease-out forwards";
+        
+        // Adiciona a animação de pulo após o fadeIn
+        setTimeout(() => {
+          botao.style.animation = "bounce 1s infinite ease-in-out";
+          botao.style.opacity = "1";
+          botao.style.transform = "translateY(0)";
+        }, 600);
       }, 800);
     });
   </script>

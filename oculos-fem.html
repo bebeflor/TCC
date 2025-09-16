@@ -87,6 +87,14 @@
           modalPrice.innerText = preco;
           modal.classList.remove("hidden");
         });
+      
+        // Adiciona botão 'Fazer pedido' sobre a imagem
+        const pedidoBtn = document.createElement('a');
+        pedidoBtn.href = 'pedido.html';
+        pedidoBtn.className = 'pedido-btn';
+        pedidoBtn.textContent = 'Fazer pedido';
+        produto.style.position = 'relative';
+        produto.appendChild(pedidoBtn);
       });
 
       closeBtn.addEventListener("click", () => {

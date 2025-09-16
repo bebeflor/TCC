@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fazer Pedido - Vitaliz</title>
+  <link rel="stylesheet" href="pedido.css">
+</head>
+<body>
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+    <nav>
+      <a href="cadastro.html">Cadastro</a>
+      <a href="inicio.html">Início</a>
+      <a href="oculos-fem.html">Moda Feminina</a>
+      <a href="oculos-masc.html">Moda Masculina</a>
+      <a href="oculos-infantil.html">Moda Infantil</a>
+      <a href="consulta.html">Exame de vista</a>
+      <a href="relogios.html">Relógios</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="produtos">
+      <h2>Fazer Pedido</h2>
+
+      <div class="form-container">
+        <form id="pedidoForm">
+          <div class="form-grid">
+            <div>
+              <label for="nome">Nome completo</label>
+              <input type="text" id="nome" name="nome" required />
+            </div>
+
+            <div>
+              <label for="telefone">Número de telefone</label>
+              <input type="tel" id="telefone" name="telefone" required />
+            </div>
+
+            <div>
+              <label for="documento">Documento (CPF ou RG)</label>
+              <input type="text" id="documento" name="documento" required />
+            </div>
+
+            <div>
+              <label for="tipoPagamento">Tipo de pagamento</label>
+              <select id="tipoPagamento" name="tipoPagamento" required>
+                <option value="">Selecione...</option>
+                <option value="cartao">Cartão de crédito</option>
+                <option value="boleto">Boleto</option>
+                <option value="pix">PIX</option>
+                <option value="dinheiro">Dinheiro</option>
+              </select>
+            </div>
+
+            <!-- parcelas: aparece apenas para cartão ou boleto -->
+            <div id="parcelasDiv" style="display:none;">
+              <label for="parcelas">Parcelas (até 6x sem juros)</label>
+              <select id="parcelas" name="parcelas">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                <option value="6">6x</option>
+              </select>
+            </div>
+
+            <div style="grid-column: 1 / 3;">
+              <label for="endereco">Endereço (opcional)</label>
+              <input type="text" id="endereco" name="endereco" />
+            </div>
+
+            <div style="grid-column: 3 / 5;">
+              <label for="observacoes">Observações</label>
+              <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="botao">Enviar pedido</button>
+            <a href="inicio.html" class="botao" style="background:#999;">Voltar</a>
+          </div>
+        </form>
+
+        <div id="confirmacao" class="confirmacao hidden">
+          <h3>Pedido recebido</h3>
+          <p>Obrigado! Seu pedido foi salvo localmente. Em breve entraremos em contato.</p>
+          <a href="inicio.html" class="botao">Voltar ao início</a>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('pedidoForm');
+    const confirmacao = document.getElementById('confirmacao');
+
+    // Preenche automático se houver parâmetros ?produto=Nome&preco=R$...
+    const params = new URLSearchParams(window.location.search);
+    const produto = params.get('produto');
+    const preco = params.get('preco');
+    if (produto) {
+      const obs = document.getElementById('observacoes');
+      obs.value = `Pedido do produto: ${produto}${preco ? ' - ' + preco : ''}`;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const dados = {
+        nome: form.nome.value.trim(),
+        telefone: form.telefone.value.trim(),
+        documento: form.documento.value.trim(),
+        tipoPagamento: form.tipoPagamento.value,
+        parcelas: document.getElementById('parcelas') ? document.getElementById('parcelas').value : '1',
+        endereco: form.endereco.value.trim(),
+        observacoes: form.observacoes.value.trim(),
+        data: new Date().toISOString()
+      };
+
+      // validação simples
+      if (!dados.nome || !dados.telefone || !dados.documento || !dados.tipoPagamento) {
+        alert('Preencha os campos obrigatórios.');
+        return;
+      }
+
+      // salva no localStorage (substitua por envio para servidor quando disponível)
+      const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+      pedidos.push(dados);
+      localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+      // mostra confirmação
+      form.classList.add('hidden');
+      confirmacao.classList.remove('hidden');
+    });
+
+    // mostra parcelas quando aplicável
+    const tipoPagamento = document.getElementById('tipoPagamento');
+    const parcelasDiv = document.getElementById('parcelasDiv');
+    tipoPagamento.addEventListener('change', (e) => {
+      if (e.target.value === 'cartao' || e.target.value === 'boleto') {
+        parcelasDiv.style.display = 'block';
+      } else {
+        parcelasDiv.style.display = 'none';
+      }
+    });
+  });
+</script>
+</body>
+</html>

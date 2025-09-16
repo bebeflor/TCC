@@ -36,18 +36,10 @@
 
 /* --- 3. Body Styles --- */
 body {
-  /* min-height: 100vh; ensures the body covers the full viewport height but can expand if content is larger */
-  min-height: 100vh;
-  /* Using CSS variables for background gradient for consistency */
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  /* Flexbox for centering the .container horizontally and vertically */
-  display: flex;
-  align-items: center;    /* Centers items vertically in the flex container */
-  justify-content: center; /* Centers items horizontally in the flex container */
-  /* Sets the default text color for elements directly in the body (e.g., outside the container) */
-  color: var(--text-light);
-  /* Adds padding to the body to prevent the container from touching screen edges on very small devices */
-  padding: var(--spacing-medium);
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff !important;
+  color: #222;
 }
 
 /* --- 4. Container Styles --- */

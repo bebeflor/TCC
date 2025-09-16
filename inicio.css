@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: #dddbdb;
+    background: #fff !important;
     display: flex;
     min-height: 100vh;
 }
@@ -140,6 +140,18 @@ a:visited {
 }
 
 /* Botão */
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .botao {
   position: relative;
   overflow: hidden;
@@ -221,8 +233,8 @@ a:visited {
 }
 
 .botao.mostrar-botao {
-  animation: fadeInUp 0.6s ease-out forwards;
-  animation-delay: 1.5s;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Animação links da sidebar */

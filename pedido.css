@@ -1,0 +1,147 @@
+/* Estilos base (compatíveis com as outras páginas) */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff !important;
+  color: #222;
+}
+
+header {
+  background-color: #002244;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffee00;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.produtos {
+  padding: 40px 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centraliza título e conteúdo */
+}
+
+.produtos h2 {
+  font-size: 34px;
+  margin-bottom: 20px;
+  color: #002244;
+  text-align: center; /* título centralizado */
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Formulário de pedido */
+.form-container {
+  max-width: 860px;
+  margin: 10px auto 60px auto;
+  background: #fff;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(2,18,30,0.06);
+  border: 4px solid #ffd700; /* borda amarela destacada */
+}
+
+/* destaque interno (linha amarela fina) */
+.form-container::before{
+  content: "";
+  display:block;
+  height:6px;
+  width:80px;
+  background:#ffd700;
+  border-radius:4px;
+  margin-bottom:12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px 18px;
+  align-items: center;
+}
+
+.form-grid label {
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.form-grid input[type="text"],
+.form-grid input[type="tel"],
+.form-grid select,
+.form-grid textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.95em;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-grid textarea { grid-column: 3 / 5; resize: vertical; min-height: 80px; }
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 22px;
+  align-items: center;
+}
+
+.botao {
+  background-color: #163041;
+  color: #fff !important;
+  padding: 14px 28px; /* mais espaço horizontal e vertical */
+  border-radius: 12px; /* cantos mais arredondados */
+  text-decoration: none;
+  font-size: 0.98em;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1.6px; /* separação entre letras/palavras */
+  text-transform: uppercase;
+  box-shadow: 0 8px 20px rgba(22,48,65,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.botao:hover { background-color: #0f2533; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(22,48,65,0.18); }
+
+/* Variante secundária para links de voltar */
+.botao.secondary {
+  background-color: #9b9b9b;
+  color: #fff !important;
+  box-shadow: none;
+}
+
+.confirmacao {
+  text-align: left;
+  padding: 18px;
+  border-radius: 8px;
+  background: #f3f6f8;
+  margin-top: 18px;
+}
+
+.hidden { display: none; }
+
+/* Mobile adjustments */
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid textarea { grid-column: 1 / 2; }
+  .form-container { margin: 14px; padding: 18px; }
+}
