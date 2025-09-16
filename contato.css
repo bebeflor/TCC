@@ -41,6 +41,20 @@ main {
   color: #002244;
 }
 
+.contato h2::after {
+  content: "";
+  width: 68px;
+  height: 6px;
+  background: #ffd700;
+  display: block;
+  margin: 12px auto 0;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .contato h2::after { width: 48px; height: 5px; }
+}
+
 .contato p {
   margin-bottom: 30px;
   font-size: 18px;

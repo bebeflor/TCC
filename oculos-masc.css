@@ -38,6 +38,21 @@ nav a {
   color: #002244;
 }
 
+/* Barrinha amarela abaixo do título da seção de produtos */
+.produtos h2::after {
+  content: "";
+  width: 68px;
+  height: 6px;
+  background: #ffd700;
+  display: block;
+  margin: 12px auto 0;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .produtos h2::after { width: 48px; height: 5px; }
+}
+
 .grid-produtos {
   display: flex;
   flex-wrap: wrap;

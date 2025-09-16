@@ -38,6 +38,21 @@ nav a {
   color: #002244;
 }
 
+/* Barrinha amarela abaixo do título da seção de produtos */
+.produtos h2::after {
+  content: "";
+  width: 68px;
+  height: 6px;
+  background: #ffd700;
+  display: block;
+  margin: 12px auto 0;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .produtos h2::after { width: 48px; height: 5px; }
+}
+
 .grid-produtos {
   display: flex;
   flex-wrap: wrap;
@@ -48,6 +63,7 @@ nav a {
 
 
 .produto {
+  position: relative; /* garante que o .pedido-btn posicione-se corretamente */
   width: 250px;
   background-color: #fff;
   border-radius: 10px;
@@ -84,6 +100,7 @@ nav a {
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.25s ease;
   z-index: 10;
+  pointer-events: auto; /* garantir interação em dispositivos touch */
 }
 
 .produto:hover .pedido-btn {
@@ -91,6 +108,28 @@ nav a {
   transform: translateX(-50%) translateY(-6px);
 }
 
+/* Tornar o botão sempre visível em telas menores (melhor para mobile/touch) */
+@media (max-width: 900px) {
+  .grid-produtos {
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .produto {
+    width: calc(50% - 24px);
+  }
+
+  .produto img {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .pedido-btn {
+    opacity: 1;
+    transform: translateX(-50%);
+    bottom: 12px;
+  }
+}
 
 footer {
   background-color: #002244;
