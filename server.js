@@ -32,6 +32,22 @@ app.get('/api/orders', (req, res) => {
   });
 });
 
+// Admin authentication (simple token-based)
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'secret123';
+function adminAuth(req, res, next) {
+  const token = req.headers['x-admin-token'] || req.query.token;
+  if (token && token === ADMIN_TOKEN) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+// Rota protegida para listar pedidos (admin)
+app.get('/api/admin/orders', adminAuth, (req, res) => {
+  db.all('SELECT * FROM orders ORDER BY id DESC', (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
 // Servir arquivos estáticos do projeto (pasta atual)
 app.use('/', express.static(path.join(__dirname)));
 

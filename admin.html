@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Pedidos</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:20px}
+    table{border-collapse:collapse;width:100%}
+    th,td{border:1px solid #ddd;padding:8px;text-align:left}
+    th{background:#002244;color:#fff}
+    .error{color:#a00}
+    .controls{margin-bottom:12px}
+  </style>
+</head>
+<body>
+  <h1>Área administrativa</h1>
+  <div class="controls">
+    <label>Token admin: <input id="token" type="text" value=""></label>
+    <button id="load">Carregar pedidos</button>
+  </div>
+  <div id="result"></div>
+
+<script>
+  document.getElementById('load').addEventListener('click', async () => {
+    const token = document.getElementById('token').value.trim();
+    if (!token) return alert('Informe o token');
+    try {
+      const res = await fetch(`/api/admin/orders`, { headers: { 'x-admin-token': token } });
+      if (!res.ok) throw new Error('Não autorizado ou erro no servidor');
+      const data = await res.json();
+      const tbl = ['<table><thead><tr><th>ID</th><th>Nome</th><th>Telefone</th><th>Documento</th><th>Pagamento</th><th>Parcelas</th><th>Produto</th><th>Observações</th><th>Data</th></tr></thead><tbody>'];
+      data.forEach(p=>{
+        tbl.push(`<tr><td>${p.id}</td><td>${p.nome}</td><td>${p.telefone}</td><td>${p.documento}</td><td>${p.tipoPagamento}</td><td>${p.parcelas}</td><td>${p.produtoTitulo||''} ${p.produtoPreco||''}</td><td>${p.observacoes||''}</td><td>${p.data}</td></tr>`);
+      });
+      tbl.push('</tbody></table>');
+      document.getElementById('result').innerHTML = tbl.join('');
+    } catch (err) {
+      document.getElementById('result').innerHTML = `<p class="error">${err.message}</p>`;
+    }
+  });
+</script>
+</body>
+</html>
