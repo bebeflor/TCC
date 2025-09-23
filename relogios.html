@@ -73,7 +73,40 @@
 
             // Pega todos os cards dentro do carrossel
             const cards = Array.from(carousel.querySelectorAll('.card'));
-            
+
+            // Adiciona botão Fazer pedido a cada card
+            cards.forEach(card => {
+                const title = card.querySelector('p') ? card.querySelector('p').innerText : '';
+                // tenta extrair preço do texto do parágrafo
+                const priceMatch = title.match(/R\$\s?\d+[\d\.,]*/);
+                const price = priceMatch ? priceMatch[0] : '';
+                const produtoText = title.replace(price, '').trim();
+                // criar botão (usando <button> para facilitar comportamento)
+                const btn = document.createElement('button');
+                btn.className = 'pedido-btn';
+                btn.type = 'button';
+                btn.textContent = 'Fazer pedido';
+                // ao clicar, adiciona ao sessionStorage e redireciona para pedido.html
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    try {
+                        const key = 'pedido_items';
+                        const existing = JSON.parse(sessionStorage.getItem(key) || '[]');
+                        existing.push({ produto: produtoText, preco: price });
+                        sessionStorage.setItem(key, JSON.stringify(existing));
+                    } catch (err) {
+                        // fallback: usar localStorage se sessionStorage falhar
+                        const key = 'pedido_items';
+                        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                        existing.push({ produto: produtoText, preco: price });
+                        localStorage.setItem(key, JSON.stringify(existing));
+                    }
+                    // redireciona para a página de pedido onde as observações serão preenchidas
+                    window.location.href = 'pedido.html';
+                });
+                card.appendChild(btn);
+            });
+
             // Função para atualizar a visibilidade das setas e dos indicadores
             function updateCarouselState() {
                 const carouselScrollLeft = carousel.scrollLeft;

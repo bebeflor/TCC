@@ -145,13 +145,14 @@ main {
     background-color: #fff;
     border-radius: 20px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    padding: 15px; /* Era 20px. Reduza o padding interno se o card diminuir */
+    padding: 15px 15px 28px; /* Aumentado o padding-bottom para acomodar o botão sem sobreposição */
     transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* Mantém caso precise posicionamento interno */
 }
 
 .card img {
@@ -166,6 +167,50 @@ main {
     margin-bottom: 10px; /* Era 15px. Reduza a margem se a imagem diminuir */
     background-color: #f0f0f0;
     padding: 5px; /* Era 10px. Reduza o padding interno da imagem */
+}
+
+/* Botão de pedido agora posicionado dentro do fluxo do card (abaixo do conteúdo), não sobreposto */
+.pedido-btn {
+    position: static; /* faz parte do fluxo normal, não sobrepõe a imagem */
+    display: inline-block;
+    margin: 12px auto 0; /* espaço acima do botão */
+    background: #163041;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(22,48,65,0.18);
+    z-index: 2;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+    opacity: 0; /* inicialmente escondido */
+    transform: translateY(8px); /* deslocado para baixo ligeiramente */
+    pointer-events: none; /* impede cliques quando escondido */
+    align-self: center; /* centraliza horizontalmente dentro do card */
+}
+
+/* Mostrar o botão somente ao passar o mouse sobre o card (desktop) */
+.card:hover .pedido-btn {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+    pointer-events: auto;
+}
+
+/* elevação sutil no hover sem quebrar layout */
+.card:hover .pedido-btn {
+    transform: translateY(-4px) scale(1.02);
+}
+
+/* Em telas pequenas (touch), manter o botão sempre visível para acesso por toque */
+@media (max-width: 900px) {
+    .pedido-btn {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        padding: 12px 18px;
+        margin-top: 14px;
+        font-size: 15px;
+    }
 }
 
 /* ... restante do seu CSS ... */
