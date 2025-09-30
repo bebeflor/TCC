@@ -72,47 +72,46 @@
             const nextBtnMobile = document.getElementById('nextBtnMobile');
 
             // Pega todos os cards dentro do carrossel
-            const cards = Array.from(carousel.querySelectorAll('.card'));
+            const cards = carousel ? Array.from(carousel.querySelectorAll('.card')) : [];
 
             // Habilita arrastar o carrossel com pointer events (melhora UX em touch/desktop)
             let isDown = false;
             let startX;
             let scrollLeftStart;
-            // garante que o carrossel permita controle por ponteiro
-            carousel.style.touchAction = 'pan-y';
-            carousel.addEventListener('pointerdown', (e) => {
-                isDown = true;
-                carousel.setPointerCapture(e.pointerId);
-                startX = e.clientX;
-                scrollLeftStart = carousel.scrollLeft;
-                carousel.classList.add('dragging');
-            });
-            carousel.addEventListener('pointermove', (e) => {
-                if (!isDown) return;
-                const x = e.clientX;
-                const walk = (startX - x); // positivo = scroll right
-                carousel.scrollLeft = scrollLeftStart + walk;
-            });
-            carousel.addEventListener('pointerup', (e) => {
-                isDown = false;
-                try { carousel.releasePointerCapture(e.pointerId); } catch (err) {}
-                carousel.classList.remove('dragging');
-            });
-            carousel.addEventListener('pointercancel', () => { isDown = false; carousel.classList.remove('dragging'); });
+            if (carousel) {
+                // garante que o carrossel permita controle por ponteiro
+                carousel.style.touchAction = 'pan-y';
+                carousel.addEventListener('pointerdown', (e) => {
+                    isDown = true;
+                    try { carousel.setPointerCapture(e.pointerId); } catch (err) {}
+                    startX = e.clientX;
+                    scrollLeftStart = carousel.scrollLeft;
+                    carousel.classList.add('dragging');
+                });
+                carousel.addEventListener('pointermove', (e) => {
+                    if (!isDown) return;
+                    const x = e.clientX;
+                    const walk = (startX - x); // positivo = scroll right
+                    carousel.scrollLeft = scrollLeftStart + walk;
+                });
+                carousel.addEventListener('pointerup', (e) => {
+                    isDown = false;
+                    try { carousel.releasePointerCapture(e.pointerId); } catch (err) {}
+                    carousel.classList.remove('dragging');
+                });
+                carousel.addEventListener('pointercancel', () => { isDown = false; carousel.classList.remove('dragging'); });
+            }
 
             // Adiciona botão Fazer pedido a cada card
             cards.forEach(card => {
                 const title = card.querySelector('p') ? card.querySelector('p').innerText : '';
-                // tenta extrair preço do texto do parágrafo
                 const priceMatch = title.match(/R\$\s?\d+[\d\.,]*/);
                 const price = priceMatch ? priceMatch[0] : '';
                 const produtoText = title.replace(price, '').trim();
-                // criar botão (usando <button> para facilitar comportamento)
                 const btn = document.createElement('button');
                 btn.className = 'pedido-btn';
                 btn.type = 'button';
                 btn.textContent = 'Fazer pedido';
-                // ao clicar, adiciona ao sessionStorage e redireciona para pedido.html
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     try {
@@ -121,150 +120,106 @@
                         existing.push({ produto: produtoText, preco: price });
                         sessionStorage.setItem(key, JSON.stringify(existing));
                     } catch (err) {
-                        // fallback: usar localStorage se sessionStorage falhar
                         const key = 'pedido_items';
                         const existing = JSON.parse(localStorage.getItem(key) || '[]');
                         existing.push({ produto: produtoText, preco: price });
                         localStorage.setItem(key, JSON.stringify(existing));
                     }
-                    // redireciona para a página de pedido onde as observações serão preenchidas
                     window.location.href = 'pedido.html';
                 });
                 card.appendChild(btn);
             });
 
+            // Função para calcular o quanto scrollar por clique (mais robusta)
+            function getScrollAmount() {
+                if (!carousel || cards.length === 0) return 0;
+                const cardWidth = cards[0].offsetWidth || 0;
+                const computedStyle = window.getComputedStyle(carousel);
+                // tenta obter a propriedade 'gap', cai para 0 se não existir ou for NaN
+                const gapRaw = computedStyle.getPropertyValue('gap') || computedStyle.getPropertyValue('column-gap') || '';
+                const gap = parseFloat(gapRaw) || 0;
+                return cardWidth + gap;
+            }
+
             // Função para atualizar a visibilidade das setas e dos indicadores
             function updateCarouselState() {
+                if (!carousel) return;
                 const carouselScrollLeft = carousel.scrollLeft;
                 const carouselScrollWidth = carousel.scrollWidth;
                 const carouselClientWidth = carousel.clientWidth;
 
-                // Desabilita a seta "anterior" se estiver no começo
-                prevBtn.disabled = carouselScrollLeft === 0;
-                if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft === 0; // Para mobile
+                if (prevBtn) prevBtn.disabled = carouselScrollLeft <= 1; // usa margem pequena
+                if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft <= 1;
 
-                // Desabilita a seta "próximo" se estiver no final
-                // Usa uma pequena margem de erro para evitar problemas de arredondamento
-                nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
-                if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5); // Para mobile
+                if (nextBtn) nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+                if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
 
-                // Atualiza os indicadores
                 updateIndicators();
-            }
-
-            // Função para calcular o quanto scrollar por clique
-            function getScrollAmount() {
-                // Tenta encontrar o primeiro card para obter sua largura + gap
-                if (cards.length > 0) {
-                    const cardWidth = cards[0].offsetWidth;
-                    const computedStyle = window.getComputedStyle(carousel);
-                    const gap = parseFloat(computedStyle.gap); // Pega o valor de 'gap' do CSS
-                    return cardWidth + gap;
-                }
-                return carousel.offsetWidth; // Fallback se não encontrar cards
-            }
-
-            // Event Listener para o botão "Anterior"
-            prevBtn.addEventListener('click', () => {
-                const scrollAmount = getScrollAmount();
-                carousel.scrollLeft -= scrollAmount;
-                // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
-            });
-
-            // Event Listener para o botão "Próximo"
-            nextBtn.addEventListener('click', () => {
-                const scrollAmount = getScrollAmount();
-                carousel.scrollLeft += scrollAmount;
-                // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
-            });
-
-            // Se houver setas mobile, adicione os event listeners para elas também
-            if (prevBtnMobile && nextBtnMobile) {
-                prevBtnMobile.addEventListener('click', () => {
-                    const scrollAmount = getScrollAmount();
-                    carousel.scrollLeft -= scrollAmount;
-                    // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
-                });
-
-                nextBtnMobile.addEventListener('click', () => {
-                    const scrollAmount = getScrollAmount();
-                    carousel.scrollLeft += scrollAmount;
-                    // A atualização do estado é feita pelo evento 'scroll' do carrossel para garantir sincronia
-                });
             }
 
             // Lógica para os indicadores (as "bolinhas")
             function createIndicators() {
-                indicatorsContainer.innerHTML = ''; // Limpa os indicadores existentes
-                // Verifica se há cards antes de tentar calcular cardsPerView
-                if (cards.length === 0) return; 
+                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                indicatorsContainer.innerHTML = '';
 
-                // Garante que o getScrollAmount seja válido antes de usar
                 const scrollAmountBase = getScrollAmount();
-                if (scrollAmountBase === 0) return; // Evita divisão por zero
+                if (scrollAmountBase === 0) return;
 
-                const cardsPerView = Math.floor(carousel.clientWidth / scrollAmountBase);
-                
-                // Calcula o número de "páginas" de cards
+                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
                 const numPages = Math.ceil(cards.length / cardsPerView);
 
                 for (let i = 0; i < numPages; i++) {
                     const indicator = document.createElement('button');
                     indicator.classList.add('indicator');
-                    indicator.dataset.page = i; // Armazena a página que o indicador representa
+                    indicator.dataset.page = i;
                     indicatorsContainer.appendChild(indicator);
 
                     indicator.addEventListener('click', (event) => {
-                        const pageIndex = parseInt(event.target.dataset.page);
-                        // Calcula a posição de scroll para a página clicada
+                        const pageIndex = parseInt(event.target.dataset.page, 10);
                         carousel.scrollTo({
-                            left: pageIndex * scrollAmountBase * cardsPerView,
+                            left: pageIndex * cardsPerView * scrollAmountBase,
                             behavior: 'smooth'
                         });
-                        // A atualização do estado é feita pelo evento 'scroll' do carrossel
                     });
                 }
             }
 
             function updateIndicators() {
-                // Se o container de indicadores não tiver filhos, recrie-os
-                if (!indicatorsContainer.children.length && cards.length > 0) { // Adicionado cards.length > 0 para evitar criar indicadores vazios
-                    createIndicators();
-                }
-
-                if (cards.length === 0) return; // Se não houver cards, não atualiza indicadores
+                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                if (!indicatorsContainer.children.length) { createIndicators(); }
 
                 const scrollAmountBase = getScrollAmount();
                 if (scrollAmountBase === 0) return;
 
-                const cardsPerView = Math.floor(carousel.clientWidth / scrollAmountBase);
+                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
+                const numPages = Math.ceil(cards.length / cardsPerView);
+
                 // Calcula a página atual baseada na posição do scroll
-                // Adiciona uma pequena margem de erro para melhorar a detecção da página
-                const currentPage = Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView));
-                
+                const currentPage = Math.max(0, Math.min(numPages - 1, Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView))));
+
                 Array.from(indicatorsContainer.children).forEach((indicator, index) => {
-                    if (index === currentPage) {
-                        indicator.classList.add('active');
-                    } else {
-                        indicator.classList.remove('active');
-                    }
+                    indicator.classList.toggle('active', index === currentPage);
                 });
             }
 
+            // Event Listener para as setas (se existirem)
+            if (prevBtn) prevBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+            if (nextBtn) nextBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+
+            if (prevBtnMobile && nextBtnMobile) {
+                prevBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+                nextBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+            }
+
             // Atualiza o estado do carrossel quando ele scrolla (manual ou por seta)
-            carousel.addEventListener('scroll', () => {
-                updateCarouselState();
-            });
+            if (carousel) carousel.addEventListener('scroll', updateCarouselState);
 
             // Inicializa o carrossel e os indicadores ao carregar a página e redimensionar
-            window.addEventListener('resize', () => {
-                createIndicators(); // Recria indicadores para ajustar-se à nova largura
-                updateCarouselState();
-            });
+            window.addEventListener('resize', () => { createIndicators(); updateCarouselState(); });
 
             // Chama a função inicial ao carregar a página
-            createIndicators(); // Cria os indicadores pela primeira vez
-            updateCarouselState(); // Define o estado inicial das setas e indicadores
+            createIndicators();
+            updateCarouselState();
         });
      </script>
  </body>
