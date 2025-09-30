@@ -89,6 +89,17 @@
           <p>Obrigado! Seu pedido foi salvo localmente. Em breve entraremos em contato.</p>
           <a href="inicio.html" class="botao">Voltar ao início</a>
         </div>
+
+        <!-- Seção de histórico local de pedidos -->
+        <div id="historico" class="historico">
+          <h3>Meus pedidos (salvos localmente)</h3>
+          <div id="historicoList">Nenhum pedido salvo localmente.</div>
+          <div style="margin-top:12px;">
+            <button id="syncBtn" class="botao" type="button">Sincronizar pedidos salvos</button>
+            <button id="clearLocalBtn" class="botao" type="button" style="background:#999;margin-left:8px;">Limpar histórico</button>
+          </div>
+        </div>
+
       </div>
 
     </section>
@@ -98,19 +109,138 @@
     © 2025 Ótica Vitaliz - Todos os direitos reservados
   </footer>
 
+  <style>
+    /* Modal de progresso */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal { background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); max-width: 420px; width: 90%; text-align: center; }
+    .spinner { width: 48px; height: 48px; border-radius: 50%; border: 5px solid #eee; border-top-color: #163041; margin: 12px auto; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .historico { margin-top: 22px; border-top: 1px solid #eee; padding-top: 16px; }
+    .historico-item { background:#fafafa; padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.95em; }
+  </style>
+
+  <div id="modalOverlay" class="modal-overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div id="modalContent">
+        <h3 id="modalTitle">Enviando pedido</h3>
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="modalMessage">Aguarde enquanto enviamos seu pedido...</p>
+      </div>
+    </div>
+  </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const historicoList = document.getElementById('historicoList');
+    const syncBtn = document.getElementById('syncBtn');
+    const clearLocalBtn = document.getElementById('clearLocalBtn');
+
+    function showModal(title, message, showSpinner = true) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modalOverlay.style.display = 'flex';
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      // toggle spinner visibility
+      document.querySelector('.spinner').style.display = showSpinner ? 'block' : 'none';
+    }
+
+    function hideModal() {
+      modalOverlay.style.display = 'none';
+      modalOverlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function loadLocalPedidos() {
+      const arr = JSON.parse(localStorage.getItem('pedidos') || '[]');
+      if (!arr.length) {
+        historicoList.textContent = 'Nenhum pedido salvo localmente.';
+        return;
+      }
+      historicoList.innerHTML = '';
+      arr.slice().reverse().forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'historico-item';
+        div.textContent = `${p.data ? new Date(p.data).toLocaleString() + ' - ' : ''}${p.nome} | ${p.telefone} | ${p.observacoes || ''}`;
+        historicoList.appendChild(div);
+      });
+    }
+
+    // sincroniza pedidos salvos localmente com o servidor
+    async function syncLocalPedidos() {
+      const arr = JSON.parse(localStorage.getItem('pedidos') || '[]');
+      if (!arr.length) { alert('Não há pedidos locais para sincronizar.'); return; }
+      showModal('Sincronizando', 'Enviando pedidos locais para o servidor...');
+      try {
+        for (const pedido of arr) {
+          await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pedido) });
+        }
+        localStorage.removeItem('pedidos');
+        loadLocalPedidos();
+        showModal('Sincronizado', 'Todos os pedidos locais foram enviados com sucesso.', false);
+        setTimeout(hideModal, 1800);
+      } catch (err) {
+        console.warn('Falha ao sincronizar:', err);
+        showModal('Erro', 'Não foi possível sincronizar todos os pedidos. Verifique a conexão e tente novamente.', false);
+        setTimeout(hideModal, 2000);
+      }
+    }
+
+    syncBtn.addEventListener('click', syncLocalPedidos);
+    clearLocalBtn.addEventListener('click', () => { if (confirm('Remover todos os pedidos salvos localmente?')) { localStorage.removeItem('pedidos'); loadLocalPedidos(); } });
+
     const form = document.getElementById('pedidoForm');
     const confirmacao = document.getElementById('confirmacao');
+
+    // Carrega itens acumulados em sessionStorage/localStorage (se houver)
+    function loadPendingItems() {
+      try {
+        const fromSession = JSON.parse(sessionStorage.getItem('pedido_items') || '[]');
+        if (Array.isArray(fromSession) && fromSession.length) return fromSession;
+      } catch (e) { /* ignore */ }
+      try {
+        const fromLocal = JSON.parse(localStorage.getItem('pedido_items') || '[]');
+        if (Array.isArray(fromLocal) && fromLocal.length) return fromLocal;
+      } catch (e) { /* ignore */ }
+      return [];
+    }
 
     // Preenche automático se houver parâmetros ?produto=Nome&preco=R$...
     const params = new URLSearchParams(window.location.search);
     const produto = params.get('produto');
     const preco = params.get('preco');
+
+    // Primeiro aplica o preenchimento por query string (mantendo compatibilidade)
     if (produto) {
       const obs = document.getElementById('observacoes');
       obs.value = `Pedido do produto: ${produto}${preco ? ' - ' + preco : ''}`;
     }
+
+    // Agora anexa todos os itens acumulados (se houver) à área de Observações
+    const pendingItems = loadPendingItems();
+    if (pendingItems.length) {
+      const obs = document.getElementById('observacoes');
+      const itemsText = pendingItems.map((it, idx) => {
+        const p = it.produto || '';
+        const pr = it.preco || '';
+        return `${idx + 1}) ${p}${pr ? ' - ' + pr : ''}`;
+      }).join('; ');
+
+      const prefix = `Itens adicionados: ${itemsText}`;
+      if (obs.value && obs.value.trim()) {
+        obs.value = obs.value.trim() + '\n' + prefix;
+      } else {
+        obs.value = prefix;
+      }
+
+      // Limpa os itens acumulados para não duplicar em próximos acessos
+      try { sessionStorage.removeItem('pedido_items'); } catch (e) {}
+      try { localStorage.removeItem('pedido_items'); } catch (e) {}
+    }
+
+    // inicializa histórico local
+    loadLocalPedidos();
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -141,6 +271,7 @@
 
       // Tenta enviar ao servidor; se falhar, salva no localStorage como fallback
       try {
+        showModal('Enviando pedido', 'Aguarde enquanto enviamos seu pedido...');
         const res = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -150,6 +281,7 @@
         if (!res.ok) throw new Error('Erro no servidor');
 
         // sucesso
+        hideModal();
         form.classList.add('hidden');
         confirmacao.classList.remove('hidden');
       } catch (err) {
@@ -157,8 +289,11 @@
         const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
         pedidos.push(dados);
         localStorage.setItem('pedidos', JSON.stringify(pedidos));
+        loadLocalPedidos();
 
-        alert('Não foi possível enviar o pedido ao servidor. O pedido foi salvo localmente e será sincronizado quando houver conexão.');
+        hideModal();
+        showModal('Salvo localmente', 'O pedido foi salvo localmente e pode ser sincronizado mais tarde.', false);
+        setTimeout(hideModal, 1500);
         form.classList.add('hidden');
         confirmacao.classList.remove('hidden');
       } finally {
