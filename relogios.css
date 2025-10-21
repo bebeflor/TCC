@@ -166,6 +166,16 @@ main {
     display: block;
 }
 
+/* classe específica criada para imagens no carrossel (HTML usa .card-img) */
+.card-img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+    margin: 8px 0 12px;
+}
+
 /* Botão de pedido agora posicionado dentro do fluxo do card (abaixo do conteúdo), não sobreposto */
 .pedido-btn {
     position: static; /* faz parte do fluxo normal, não sobrepõe a imagem */
@@ -284,7 +294,7 @@ footer {
     }
 
     .card { width: 200px; height: 300px; }
-    .card img { width: 160px; height: 160px; }
+    .card img, .card-img { width: 160px; height: 160px; }
 }
 
 @media (max-width: 900px) {
@@ -346,9 +356,10 @@ footer {
         padding: 15px;
     }
 
-    .card img {
+    .card img, .card-img {
         width: 100%;
         height: 200px;
+        object-fit: cover;
     }
 
     .arrow {
@@ -356,4 +367,29 @@ footer {
         width: 50px;
         height: 50px;
     }
+}
+
+/* TOAST DE CONFIRMAÇÃO DE PEDIDO */
+.pedido-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(22,48,65,0.95);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.pedido-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Assegura que o botão esteja sempre acessível em mobile */
+.card .pedido-btn {
+  pointer-events: auto;
 }
