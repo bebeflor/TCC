@@ -136,8 +136,8 @@ main {
 
 .card {
     /* Diminua estes valores */
-    width: 200px; /* Era 250px, por exemplo. Ajuste conforme desejar */
-    height: 300px; /* Era 350px, por exemplo. Ajuste conforme desejar */
+    width: 220px; /* tamanho do card ajustado para combinar com imagens */
+    height: 320px; /* altura fixa para manter consistência visual */
     
     /* Mantenha o restante das propriedades */
     flex: 0 0 auto;
@@ -150,23 +150,20 @@ main {
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start; /* alinha conteúdo no topo para consistência */
     align-items: center;
     position: relative; /* Mantém caso precise posicionamento interno */
+    overflow: hidden; /* evita overflow quando imagens maiores */
 }
 
 .card img {
-    /* Diminua estes valores para a imagem dentro do card */
-    max-width: 150px; /* Era 200px. Ajuste para um tamanho menor */
-    height: 150px; /* Era 200px. Ajuste para um tamanho menor */
-    
-    /* Mantenha o restante das propriedades */
-    width: 100%; /* Isso garante que ela se ajuste à max-width */
-    object-fit: contain;
-    border-radius: 15px;
-    margin-bottom: 10px; /* Era 15px. Reduza a margem se a imagem diminuir */
-    background-color: #f0f0f0;
-    padding: 5px; /* Era 10px. Reduza o padding interno da imagem */
+    /* Forçar todas as imagens a serem iguais visualmente */
+    width: 180px; /* tamanho interno da imagem */
+    height: 180px; /* mesma altura para todas */
+    object-fit: cover; /* recorta mantendo proporção */
+    border-radius: 14px;
+    margin: 8px 0 12px; /* espaço entre imagem e texto */
+    display: block;
 }
 
 /* Botão de pedido agora posicionado dentro do fluxo do card (abaixo do conteúdo), não sobreposto */
@@ -218,24 +215,6 @@ main {
 .card:hover {
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-}
-
-.card img {
-    width: 100%;
-    max-width: 200px;
-    height: 200px;
-    object-fit: contain;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    background-color: #f0f0f0;
-    padding: 10px;
-}
-
-.card p {
-    margin-top: auto;
-    font-size: 1.1em;
-    color: #444;
-    font-weight: 600;
 }
 
 /* SETAS DE NAVEGAÇÃO */
@@ -303,6 +282,9 @@ footer {
     .arrow.right {
         right: 0; /* Move a seta para a borda do wrapper */
     }
+
+    .card { width: 200px; height: 300px; }
+    .card img { width: 160px; height: 160px; }
 }
 
 @media (max-width: 900px) {
@@ -359,14 +341,14 @@ footer {
     }
 
     .card {
-        width: 100px; /* Cards um pouco menores em telas muito pequenas */
-        height: 300px;
+        width: calc(100% - 32px); /* Cards um pouco menores em telas muito pequenas */
+        height: auto;
         padding: 15px;
     }
 
     .card img {
-        max-width: 150px;
-        height: 150px;
+        width: 100%;
+        height: 200px;
     }
 
     .arrow {

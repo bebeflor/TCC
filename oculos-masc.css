@@ -71,18 +71,22 @@ nav a {
   text-align: center;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
+  position: relative; /* necessário para posicionamento absoluto do botão */
+  overflow: hidden; /* evita que elementos flutuem para fora */
 }
 
 .produto:hover {
   transform: scale(1.05);
 }
 
+/* Imagens padronizadas: todas terão mesma largura/altura e objeto recortado */
 .produto img {
-  width: 100%;
-  height: 230px;
-  object-fit: cover;
+  width: 220px; /* fixo para manter uniformidade */
+  height: 220px; /* fixo para manter uniformidade */
+  object-fit: cover; /* preenche e corta se necessário, mantendo proporção */
   border-radius: 8px;
-
+  display: block;
+  margin: 0 auto 12px; /* centraliza e adiciona espaço abaixo para título */
 }
 
 .pedido-btn {
@@ -99,11 +103,24 @@ nav a {
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.25s ease;
   z-index: 10;
+  display: inline-block;
 }
 
 .produto:hover .pedido-btn {
   opacity: 1;
   transform: translateX(-50%) translateY(-6px);
+}
+
+/* Mostra o botão sempre em telas pequenas para facilidade de toque */
+@media (max-width: 900px) {
+  .pedido-btn { opacity: 1; transform: translateX(-50%); }
+  .produto img { width: 100%; height: 220px; }
+  .produto { width: calc(50% - 24px); }
+}
+
+@media (max-width: 480px) {
+  .produto { width: calc(100% - 32px); }
+  .produto img { height: 200px; }
 }
 
 
