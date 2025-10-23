@@ -190,13 +190,14 @@ main {
     box-shadow: 0 6px 18px rgba(22,48,65,0.18);
     z-index: 2;
     transition: transform 0.18s ease, opacity 0.18s ease;
-    opacity: 0; /* inicialmente escondido */
-    transform: translateY(8px); /* deslocado para baixo ligeiramente */
-    pointer-events: none; /* impede cliques quando escondido */
+    opacity: 1; /* garantir visível por padrão */
+    transform: translateY(0); /* sem deslocamento */
+    pointer-events: auto; /* garante que seja clicável */
     align-self: center; /* centraliza horizontalmente dentro do card */
 }
 
-/* Mostrar o botão somente ao passar o mouse sobre o card (desktop) */
+/* Mostrar o botão somente ao passar o mouse sobre o card (desktop)
+   -- mantido para aparência, mas como já está visível, este bloco apenas intensifica efeito */
 .card:hover .pedido-btn {
     opacity: 1;
     transform: translateY(0) scale(1.02);

@@ -27,20 +27,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Lógica dos botões "Fazer pedido" ---
-  const botoesPedido = document.querySelectorAll('.btn-fazer-pedido');
+  // Seleciona botões usados nas páginas (.pedido-btn) e também .btn-fazer-pedido por compatibilidade
+  const botoesPedido = document.querySelectorAll('.pedido-btn, .btn-fazer-pedido');
   
   botoesPedido.forEach(botao => {
     botao.addEventListener('click', (e) => {
-      e.preventDefault(); // evita recarregar ou seguir link
-      const card = botao.closest('.card'); // ou ajuste conforme seu HTML
-      const nomeProduto = card?.querySelector('.titulo-produto')?.innerText || 'Produto';
-      
-      // Aqui você escolhe o que acontece ao clicar:
-      console.log(`Pedido solicitado: ${nomeProduto}`);
-      alert(`Você clicou em "${nomeProduto}"`);
-      
-      // Exemplo: abrir modal, redirecionar pro WhatsApp etc.
-      // window.open(`https://wa.me/5581999999999?text=Quero comprar o ${nomeProduto}`, '_blank');
+      e.preventDefault();
+      e.stopPropagation();
+
+      // tenta extrair nome e preço do card pai
+      const card = botao.closest('.card') || botao.closest('.produto');
+      const nome = card?.querySelector('.titulo')?.innerText
+                || card?.querySelector('.titulo-produto')?.innerText
+                || card?.querySelector('p')?.innerText
+                || botao.dataset.produto
+                || 'Produto';
+      const preco = card?.querySelector('.preco')?.innerText
+                 || (card?.querySelector('p')?.innerText.match(/R\$\s?\d+[\d\.,]*/) || [''])[0]
+                 || botao.dataset.preco
+                 || '';
+
+      // salva em sessionStorage com fallback para localStorage
+      const key = 'pedido_items';
+      try {
+        const existing = JSON.parse(sessionStorage.getItem(key) || '[]');
+        existing.push({ produto: nome, preco });
+        sessionStorage.setItem(key, JSON.stringify(existing));
+      } catch (err) {
+        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        existing.push({ produto: nome, preco });
+        localStorage.setItem(key, JSON.stringify(existing));
+      }
+
+      // redireciona para a página de pedido (mesmo comportamento das outras páginas)
+      window.location.href = 'pedido.html';
     });
   });
 });

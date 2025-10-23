@@ -62,251 +62,273 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const carousel = document.getElementById('carousel');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const indicatorsContainer = document.getElementById('carouselIndicators');
+            // lightweight debug helper (logs to console only)
+            function dbg(msg) { try { console.log(msg); } catch(e){} }
 
-            // Se você adicionou as setas mobile no HTML
-            const prevBtnMobile = document.getElementById('prevBtnMobile');
-            const nextBtnMobile = document.getElementById('nextBtnMobile');
+            try {
+                dbg('DOMContentLoaded running');
 
-            // Pega todos os cards dentro do carrossel
-            const cards = carousel ? Array.from(carousel.querySelectorAll('.card')) : [];
+                const carousel = document.getElementById('carousel');
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const indicatorsContainer = document.getElementById('carouselIndicators');
 
-            // Habilita arrastar o carrossel com pointer events (melhora UX em touch/desktop)
-            let isDown = false;
-            let startX;
-            let scrollLeftStart;
-            if (carousel) {
-                // garante que o carrossel permita controle por ponteiro
-                carousel.style.touchAction = 'pan-y';
-                carousel.addEventListener('pointerdown', (e) => {
-                    isDown = true;
-                    try { carousel.setPointerCapture(e.pointerId); } catch (err) {}
-                    startX = e.clientX;
-                    scrollLeftStart = carousel.scrollLeft;
-                    carousel.classList.add('dragging');
-                });
-                carousel.addEventListener('pointermove', (e) => {
-                    if (!isDown) return;
-                    const x = e.clientX;
-                    const walk = (startX - x); // positivo = scroll right
-                    carousel.scrollLeft = scrollLeftStart + walk;
-                });
-                carousel.addEventListener('pointerup', (e) => {
-                    isDown = false;
-                    try { carousel.releasePointerCapture(e.pointerId); } catch (err) {}
-                    carousel.classList.remove('dragging');
-                });
-                carousel.addEventListener('pointercancel', () => { isDown = false; carousel.classList.remove('dragging'); });
-            }
+                // Se você adicionou as setas mobile no HTML
+                const prevBtnMobile = document.getElementById('prevBtnMobile');
+                const nextBtnMobile = document.getElementById('nextBtnMobile');
 
-            // Funções de utilidade para pedido (definidas antes de criar botões)
-            function addToPedido(produto, preco) {
-                const key = 'pedido_items';
-                try {
-                    const stored = sessionStorage.getItem(key);
-                    const existing = stored ? JSON.parse(stored) : [];
-                    existing.push({ produto, preco });
-                    sessionStorage.setItem(key, JSON.stringify(existing));
-                    return true;
-                } catch (err) {
-                    console.error('Erro ao usar sessionStorage:', err);
-                    try {
-                        const stored = localStorage.getItem(key);
-                        const existing = stored ? JSON.parse(stored) : [];
-                        existing.push({ produto, preco });
-                        localStorage.setItem(key, JSON.stringify(existing));
-                        return true;
-                    } catch (e) {
-                        console.error('Erro ao usar localStorage:', e);
-                        return false;
-                    }
+                // Pega todos os cards dentro do carrossel
+                const cards = carousel ? Array.from(carousel.querySelectorAll('.card')) : [];
+                dbg('cards found = ' + cards.length);
+
+                // Habilita arrastar o carrossel com pointer events (melhora UX em touch/desktop)
+                let isDown = false;
+                let startX;
+                let scrollLeftStart;
+                if (carousel) {
+                    // garante que o carrossel permita controle por ponteiro
+                    carousel.style.touchAction = 'pan-y';
+                    carousel.addEventListener('pointerdown', (e) => {
+                        // se o usuário clicou em um botão de pedido ou outro elemento interativo,
+                        // não inicie o arraste nem capture o ponteiro — assim o botão recebe o evento
+                        if (e.target && e.target.closest && e.target.closest('.pedido-btn, button, a')) return;
+
+                        isDown = true;
+                        startX = e.clientX;
+                        scrollLeftStart = carousel.scrollLeft;
+                        try { if (carousel.setPointerCapture) carousel.setPointerCapture(e.pointerId); } catch (err) {}
+                        carousel.classList.add('dragging');
+                    });
+                    carousel.addEventListener('pointermove', (e) => {
+                        if (!isDown) return;
+                        const x = e.clientX;
+                        const walk = (startX - x); // positivo = scroll right
+                        carousel.scrollLeft = scrollLeftStart + walk;
+                    });
+                    carousel.addEventListener('pointerup', (e) => {
+                        isDown = false;
+                        try { carousel.releasePointerCapture(e.pointerId); } catch (err) {}
+                        carousel.classList.remove('dragging');
+                    });
+                    carousel.addEventListener('pointercancel', () => { isDown = false; carousel.classList.remove('dragging'); });
                 }
-            }
 
-            function showToast(text) {
-                const toast = document.createElement('div');
-                toast.className = 'pedido-toast';
-                toast.style.cssText = `
-                    position: fixed;
-                    bottom: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: rgba(0,0,0,0.85);
-                    color: white;
-                    padding: 10px 18px;
-                    border-radius: 6px;
-                    z-index: 9999;
-                    opacity: 0;
-                    transition: opacity 0.2s ease;
-                    pointer-events: none;
-                `;
-                toast.innerText = text;
-                document.body.appendChild(toast);
-                // força reflow
-                void toast.offsetWidth;
-                toast.style.opacity = '1';
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => toast.remove(), 220);
-                }, 1200);
-            }
-
-            console.log('relogios: DOM ready, cards found =', cards.length);
-
-            function handlePedidoClick(produto, preco, source) {
-                console.log('handlePedidoClick', { produto, preco, source });
-                if (addToPedido(produto, preco)) {
-                    showToast('Produto adicionado ao pedido');
-                    setTimeout(() => { window.location.href = 'pedido.html'; }, 800);
-                } else {
-                    showToast('Erro ao adicionar produto');
-                }
-            }
-
-            // Adiciona botão Fazer pedido a cada card (modo simples e compatível com outras páginas)
-            cards.forEach(card => {
-                const titleEl = card.querySelector('p');
-                const title = titleEl ? titleEl.innerText.trim() : '';
-                const priceMatch = title.match(/R\$\s?\d+[\d\.,]*/);
-                const price = priceMatch ? priceMatch[0] : '';
-                const produtoText = title.replace(price, '').trim();
-
-                const pedidoBtn = document.createElement('button');
-                pedidoBtn.type = 'button';
-                pedidoBtn.className = 'pedido-btn';
-                pedidoBtn.textContent = 'Fazer pedido';
-
-                // garante que o botão fique posicionado corretamente
-                card.style.position = 'relative';
-                card.appendChild(pedidoBtn);
-
-                pedidoBtn.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                    // segue o padrão usado em outras páginas: sessionStorage com fallback para localStorage
+                // Funções de utilidade para pedido (definidas antes de criar botões)
+                function addToPedido(produto, preco) {
                     const key = 'pedido_items';
                     try {
-                        const existing = JSON.parse(sessionStorage.getItem(key) || '[]');
-                        existing.push({ produto: produtoText, preco: price });
+                        const stored = sessionStorage.getItem(key);
+                        const existing = stored ? JSON.parse(stored) : [];
+                        existing.push({ produto, preco });
                         sessionStorage.setItem(key, JSON.stringify(existing));
+                        return true;
                     } catch (err) {
-                        const existing = JSON.parse(localStorage.getItem(key) || '[]');
-                        existing.push({ produto: produtoText, preco: price });
-                        localStorage.setItem(key, JSON.stringify(existing));
+                        console.error('Erro ao usar sessionStorage:', err);
+                        try {
+                            const stored = localStorage.getItem(key);
+                            const existing = stored ? JSON.parse(stored) : [];
+                            existing.push({ produto, preco });
+                            localStorage.setItem(key, JSON.stringify(existing));
+                            return true;
+                        } catch (e) {
+                            console.error('Erro ao usar localStorage:', e);
+                            return false;
+                        }
                     }
-                    // redireciona para a página de pedido como nas outras páginas
-                    window.location.href = 'pedido.html';
+                }
+
+                function showToast(text) {
+                    const toast = document.createElement('div');
+                    toast.className = 'pedido-toast';
+                    toast.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-color: rgba(0,0,0,0.85);
+                        color: white;
+                        padding: 10px 18px;
+                        border-radius: 6px;
+                        z-index: 9999;
+                        opacity: 0;
+                        transition: opacity 0.2s ease;
+                        pointer-events: none;
+                    `;
+                    toast.innerText = text;
+                    document.body.appendChild(toast);
+                    // força reflow
+                    void toast.offsetWidth;
+                    toast.style.opacity = '1';
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        setTimeout(() => toast.remove(), 220);
+                    }, 1200);
+                }
+
+                console.log('relogios: DOM ready, cards found =', cards.length);
+
+                function handlePedidoClick(produto, preco, source) {
+                    console.log('handlePedidoClick', { produto, preco, source });
+                    if (addToPedido(produto, preco)) {
+                        showToast('Produto adicionado ao pedido');
+                        setTimeout(() => { window.location.href = 'pedido.html'; }, 800);
+                    } else {
+                        showToast('Erro ao adicionar produto');
+                    }
+                }
+
+                // Cria um botão por card e adiciona listener direto (padronizado com outras páginas)
+                cards.forEach(card => {
+                    const titleEl = card.querySelector('p');
+                    const title = titleEl ? titleEl.innerText.trim() : '';
+                    const priceMatch = title.match(/R\$\s?\d+[\d\.,]*/);
+                    const price = priceMatch ? priceMatch[0] : '';
+                    const produtoText = title.replace(price, '').trim();
+
+                    const pedidoBtn = document.createElement('button');
+                    pedidoBtn.type = 'button';
+                    pedidoBtn.className = 'pedido-btn';
+                    pedidoBtn.textContent = 'Fazer pedido';
+                    pedidoBtn.dataset.produto = produtoText;
+                    pedidoBtn.dataset.preco = price;
+
+                    // garante que o botão fique posicionável
+                    if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+                    card.appendChild(pedidoBtn);
+
+                    // Adiciona listener via pointerup (fallback) e listener de click no modo capture para garantir execução
+                    pedidoBtn.addEventListener('pointerup', (ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        dbg('pedido-btn pointerup (fallback) produto=' + (pedidoBtn.dataset.produto || produtoText));
+                        const produto = pedidoBtn.dataset.produto || produtoText || 'Produto';
+                        const preco = pedidoBtn.dataset.preco || price || '';
+                        const ok = addToPedido(produto, preco);
+                        if (ok) {
+                            showToast('Produto adicionado ao pedido');
+                            setTimeout(() => { window.location.href = 'pedido.html'; }, 600);
+                        } else {
+                            showToast('Erro ao adicionar produto');
+                        }
+                    });
+
+                    pedidoBtn.addEventListener('click', (ev) => {
+                        // handler já existente (preserva)
+                    });
                 });
-            });
 
-            // Delegação de evento: captura cliques nos botões dentro do carrossel
-            if (carousel) {
-                carousel.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.pedido-btn');
-                    if (!btn || !carousel.contains(btn)) return;
-                    e.preventDefault();
-                    e.stopPropagation();
+                // Listener em capture no document para garantir que cliques em .pedido-btn sejam detectados
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest && e.target.closest('.pedido-btn');
+                    if (!btn) return;
+                    dbg('document capture detected pedido-btn, dataset=' + JSON.stringify({produto: btn.dataset.produto, preco: btn.dataset.preco}));
+                    // não prevenir default aqui para manter comportamento do handler local
+                }, true);
 
-                    const produto = btn.dataset.produto || (btn.closest('.card')?.querySelector('p')?.innerText || '').replace(/R\$\s?\d+[\d\.,]*/, '').trim();
-                    const preco = btn.dataset.preco || (btn.closest('.card')?.querySelector('p')?.innerText.match(/R\$\s?\d+[\d\.,]*/) || [''])[0];
-
-                    console.log('delegated click on pedido-btn', { produto, preco });
-                    handlePedidoClick(produto, preco, 'delegated');
+                // Confirm creation of buttons, but do not alter styles here
+                const allPedidoBtns = document.querySelectorAll('.pedido-btn');
+                dbg('pedido buttons created = ' + allPedidoBtns.length);
+                allPedidoBtns.forEach((b, i) => {
+                    try {
+                        // add simple click log without styling changes
+                        b.addEventListener('click', () => dbg('pedido-btn clicked index=' + i + ' produto=' + (b.dataset.produto || '') + ' preco=' + (b.dataset.preco || '')));
+                    } catch (e) { console.error(e); }
                 });
-            }
 
-            // Função para calcular o quanto scrollar por clique (mais robusta)
-            function getScrollAmount() {
-                if (!carousel || cards.length === 0) return 0;
-                const cardWidth = cards[0].offsetWidth || 0;
-                const computedStyle = window.getComputedStyle(carousel);
-                // tenta obter a propriedade 'gap', cai para 0 se não existir ou for NaN
-                const gapRaw = computedStyle.getPropertyValue('gap') || computedStyle.getPropertyValue('column-gap') || '';
-                const gap = parseFloat(gapRaw) || 0;
-                return cardWidth + gap;
-            }
+                // Função para calcular o quanto scrollar por clique (mais robusta)
+                function getScrollAmount() {
+                    if (!carousel || cards.length === 0) return 0;
+                    const cardWidth = cards[0].offsetWidth || 0;
+                    const computedStyle = window.getComputedStyle(carousel);
+                    // tenta obter a propriedade 'gap', cai para 0 se não existir ou for NaN
+                    const gapRaw = computedStyle.getPropertyValue('gap') || computedStyle.getPropertyValue('column-gap') || '';
+                    const gap = parseFloat(gapRaw) || 0;
+                    return cardWidth + gap;
+                }
 
-            // Função para atualizar a visibilidade das setas e dos indicadores
-            function updateCarouselState() {
-                if (!carousel) return;
-                const carouselScrollLeft = carousel.scrollLeft;
-                const carouselScrollWidth = carousel.scrollWidth;
-                const carouselClientWidth = carousel.clientWidth;
+                // Função para atualizar a visibilidade das setas e dos indicadores
+                function updateCarouselState() {
+                    if (!carousel) return;
+                    const carouselScrollLeft = carousel.scrollLeft;
+                    const carouselScrollWidth = carousel.scrollWidth;
+                    const carouselClientWidth = carousel.clientWidth;
 
-                if (prevBtn) prevBtn.disabled = carouselScrollLeft <= 1; // usa margem pequena
-                if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft <= 1;
+                    if (prevBtn) prevBtn.disabled = carouselScrollLeft <= 1; // usa margem pequena
+                    if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft <= 1;
 
-                if (nextBtn) nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
-                if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+                    if (nextBtn) nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+                    if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
 
-                updateIndicators();
-            }
+                    updateIndicators();
+                }
 
-            // Lógica para os indicadores (as "bolinhas")
-            function createIndicators() {
-                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
-                indicatorsContainer.innerHTML = '';
+                // Lógica para os indicadores (as "bolinhas")
+                function createIndicators() {
+                    if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                    indicatorsContainer.innerHTML = '';
 
-                const scrollAmountBase = getScrollAmount();
-                if (scrollAmountBase === 0) return;
+                    const scrollAmountBase = getScrollAmount();
+                    if (scrollAmountBase === 0) return;
 
-                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
-                const numPages = Math.ceil(cards.length / cardsPerView);
+                    const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
+                    const numPages = Math.ceil(cards.length / cardsPerView);
 
-                for (let i = 0; i < numPages; i++) {
-                    const indicator = document.createElement('button');
-                    indicator.classList.add('indicator');
-                    indicator.dataset.page = i;
-                    indicatorsContainer.appendChild(indicator);
+                    for (let i = 0; i < numPages; i++) {
+                        const indicator = document.createElement('button');
+                        indicator.classList.add('indicator');
+                        indicator.dataset.page = i;
+                        indicatorsContainer.appendChild(indicator);
 
-                    indicator.addEventListener('click', (event) => {
-                        const pageIndex = parseInt(event.target.dataset.page, 10);
-                        carousel.scrollTo({
-                            left: pageIndex * cardsPerView * scrollAmountBase,
-                            behavior: 'smooth'
+                        indicator.addEventListener('click', (event) => {
+                            const pageIndex = parseInt(event.target.dataset.page, 10);
+                            carousel.scrollTo({
+                                left: pageIndex * cardsPerView * scrollAmountBase,
+                                behavior: 'smooth'
+                            });
                         });
+                    }
+                }
+
+                function updateIndicators() {
+                    if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                    if (!indicatorsContainer.children.length) { createIndicators(); }
+
+                    const scrollAmountBase = getScrollAmount();
+                    if (scrollAmountBase === 0) return;
+
+                    const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
+                    const numPages = Math.ceil(cards.length / cardsPerView);
+
+                    // Calcula a página atual baseada na posição do scroll
+                    const currentPage = Math.max(0, Math.min(numPages - 1, Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView))));
+
+                    Array.from(indicatorsContainer.children).forEach((indicator, index) => {
+                        indicator.classList.toggle('active', index === currentPage);
                     });
                 }
+
+                // Event Listener para as setas (se existirem)
+                if (prevBtn) prevBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+                if (nextBtn) nextBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+
+                if (prevBtnMobile && nextBtnMobile) {
+                    prevBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+                    nextBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+                }
+
+                // Atualiza o estado do carrossel quando ele scrolla (manual ou por seta)
+                if (carousel) carousel.addEventListener('scroll', updateCarouselState);
+
+                // Inicializa o carrossel e os indicadores ao carregar a página e redimensionar
+                window.addEventListener('resize', () => { createIndicators(); updateCarouselState(); });
+
+                // Chama a função inicial ao carregar a página
+                createIndicators();
+                updateCarouselState();
+            } catch (err) {
+                dbg('ERROR: ' + (err && err.message ? err.message : String(err)));
+                console.error(err);
             }
-
-            function updateIndicators() {
-                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
-                if (!indicatorsContainer.children.length) { createIndicators(); }
-
-                const scrollAmountBase = getScrollAmount();
-                if (scrollAmountBase === 0) return;
-
-                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
-                const numPages = Math.ceil(cards.length / cardsPerView);
-
-                // Calcula a página atual baseada na posição do scroll
-                const currentPage = Math.max(0, Math.min(numPages - 1, Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView))));
-
-                Array.from(indicatorsContainer.children).forEach((indicator, index) => {
-                    indicator.classList.toggle('active', index === currentPage);
-                });
-            }
-
-            // Event Listener para as setas (se existirem)
-            if (prevBtn) prevBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
-            if (nextBtn) nextBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
-
-            if (prevBtnMobile && nextBtnMobile) {
-                prevBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
-                nextBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
-            }
-
-            // Atualiza o estado do carrossel quando ele scrolla (manual ou por seta)
-            if (carousel) carousel.addEventListener('scroll', updateCarouselState);
-
-            // Inicializa o carrossel e os indicadores ao carregar a página e redimensionar
-            window.addEventListener('resize', () => { createIndicators(); updateCarouselState(); });
-
-            // Chama a função inicial ao carregar a página
-            createIndicators();
-            updateCarouselState();
         });
      </script>
  </body>
