@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relógios - Vitaliz</title>
+    <link rel="stylesheet" href="relogios.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="logo">Vitaliz</h1>
+        <nav class="sidebar-nav">
+            <a href="cadastro.html">Cadastro</a>
+            <a href="inicio.html">Início</a>
+            <a href="oculos-fem.html">Moda Feminina</a>
+            <a href="oculos-masc.html">Moda Masculina</a>
+            <a href="oculos-infantil.html">Moda Infantil</a>
+            <a href="consulta.html">Exame de vista</a>
+            <a href="relogios.html">Relógios</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="relogios">
+            <h2>Nossos Relógios</h2>
+
+            <div class="carousel-wrapper">
+                <button class="arrow left" id="prevBtn">&#10094;</button>
+
+                <div class="carousel" id="carousel">
+                    <div class="card"><img class="card-img" src="img/relogio1.png" alt="Technos - R$ 490,00" loading="lazy" decoding="async" /><p>Condor dourado- R$ 590,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio2.png" alt="Azul Mormaii - R$ 479,00" loading="lazy" decoding="async" /><p> Mormaii preto- R$ 479,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio3.png" alt="Condor Feminino - R$ 459,00" loading="lazy" decoding="async" /><p>Mormaii dourado - R$ 699,90</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio4.png" alt="Smartwatch - R$ 899,99" loading="lazy" decoding="async" /><p>Technos unisex- R$ 599,99</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio5.png" alt="Technos Masculino - R$ 759,90" loading="lazy" decoding="async" /><p>Mormaii masculio azul- R$ 759,90</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio7.jpeg" alt="Condor Masculino - R$ 650,00" loading="lazy" decoding="async" /><p>Apple watch unisex - R$ 1.299,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio6.png" alt="Euro Feminino - R$ 850,00" loading="lazy" decoding="async" /><p>Condor feminino - R$ 850,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio9.jpeg" alt="Mormaii Dourado - R$ 610,00" loading="lazy" decoding="async" /><p>  Euro feminino com pulseira - R$ 799,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio10.jpeg" alt="Mormaii Dourado - R$ 610,00" loading="lazy" decoding="async" /><p>  Mormaii azul masculino - R$ 580,00</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio11.jpeg" alt="Mormaii Dourado - R$ 610,00" loading="lazy" decoding="async" /><p>  Euro masculino - R$ 677,90</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio8.jpeg" alt="Mormaii Dourado - R$ 610,00" loading="lazy" decoding="async" /><p>  Condor masculino - R$ 659,90</p></div>
+                    <div class="card"><img class="card-img" src="img/relogio12.jpeg" alt="Mormaii Dourado - R$ 610,00" loading="lazy" decoding="async" /><p>  Technos feminino - R$ 550,00</p></div>
+                </div>
+
+
+                <button class="arrow right" id="nextBtn">&#10095;</button>
+
+                <div class="carousel-arrows-mobile">
+                    <button class="arrow left mobile-arrow" id="prevBtnMobile">&#10094;</button>
+                    <button class="arrow right mobile-arrow" id="nextBtnMobile">&#10095;</button>
+                </div>
+            </div>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 Ótica Vitaliz - Todos os direitos reservados
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+
+            // Se você adicionou as setas mobile no HTML
+            const prevBtnMobile = document.getElementById('prevBtnMobile');
+            const nextBtnMobile = document.getElementById('nextBtnMobile');
+
+            // Pega todos os cards dentro do carrossel
+            const cards = carousel ? Array.from(carousel.querySelectorAll('.card')) : [];
+
+            // Habilita arrastar o carrossel com pointer events (melhora UX em touch/desktop)
+            let isDown = false;
+            let startX;
+            let scrollLeftStart;
+            if (carousel) {
+                // garante que o carrossel permita controle por ponteiro
+                carousel.style.touchAction = 'pan-y';
+                carousel.addEventListener('pointerdown', (e) => {
+                    isDown = true;
+                    try { carousel.setPointerCapture(e.pointerId); } catch (err) {}
+                    startX = e.clientX;
+                    scrollLeftStart = carousel.scrollLeft;
+                    carousel.classList.add('dragging');
+                });
+                carousel.addEventListener('pointermove', (e) => {
+                    if (!isDown) return;
+                    const x = e.clientX;
+                    const walk = (startX - x); // positivo = scroll right
+                    carousel.scrollLeft = scrollLeftStart + walk;
+                });
+                carousel.addEventListener('pointerup', (e) => {
+                    isDown = false;
+                    try { carousel.releasePointerCapture(e.pointerId); } catch (err) {}
+                    carousel.classList.remove('dragging');
+                });
+                carousel.addEventListener('pointercancel', () => { isDown = false; carousel.classList.remove('dragging'); });
+            }
+
+            // Funções de utilidade para pedido (definidas antes de criar botões)
+            function addToPedido(produto, preco) {
+                const key = 'pedido_items';
+                try {
+                    const stored = sessionStorage.getItem(key);
+                    const existing = stored ? JSON.parse(stored) : [];
+                    existing.push({ produto, preco });
+                    sessionStorage.setItem(key, JSON.stringify(existing));
+                    return true;
+                } catch (err) {
+                    console.error('Erro ao usar sessionStorage:', err);
+                    try {
+                        const stored = localStorage.getItem(key);
+                        const existing = stored ? JSON.parse(stored) : [];
+                        existing.push({ produto, preco });
+                        localStorage.setItem(key, JSON.stringify(existing));
+                        return true;
+                    } catch (e) {
+                        console.error('Erro ao usar localStorage:', e);
+                        return false;
+                    }
+                }
+            }
+
+            function showToast(text) {
+                const toast = document.createElement('div');
+                toast.className = 'pedido-toast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: rgba(0,0,0,0.85);
+                    color: white;
+                    padding: 10px 18px;
+                    border-radius: 6px;
+                    z-index: 9999;
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
+                    pointer-events: none;
+                `;
+                toast.innerText = text;
+                document.body.appendChild(toast);
+                // força reflow
+                void toast.offsetWidth;
+                toast.style.opacity = '1';
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 220);
+                }, 1200);
+            }
+
+            console.log('relogios: DOM ready, cards found =', cards.length);
+
+            function handlePedidoClick(produto, preco, source) {
+                console.log('handlePedidoClick', { produto, preco, source });
+                if (addToPedido(produto, preco)) {
+                    showToast('Produto adicionado ao pedido');
+                    setTimeout(() => { window.location.href = 'pedido.html'; }, 800);
+                } else {
+                    showToast('Erro ao adicionar produto');
+                }
+            }
+
+            // Adiciona botão Fazer pedido a cada card (modo simples e compatível com outras páginas)
+            cards.forEach(card => {
+                const titleEl = card.querySelector('p');
+                const title = titleEl ? titleEl.innerText.trim() : '';
+                const priceMatch = title.match(/R\$\s?\d+[\d\.,]*/);
+                const price = priceMatch ? priceMatch[0] : '';
+                const produtoText = title.replace(price, '').trim();
+
+                const pedidoBtn = document.createElement('button');
+                pedidoBtn.type = 'button';
+                pedidoBtn.className = 'pedido-btn';
+                pedidoBtn.textContent = 'Fazer pedido';
+
+                // garante que o botão fique posicionado corretamente
+                card.style.position = 'relative';
+                card.appendChild(pedidoBtn);
+
+                pedidoBtn.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    // segue o padrão usado em outras páginas: sessionStorage com fallback para localStorage
+                    const key = 'pedido_items';
+                    try {
+                        const existing = JSON.parse(sessionStorage.getItem(key) || '[]');
+                        existing.push({ produto: produtoText, preco: price });
+                        sessionStorage.setItem(key, JSON.stringify(existing));
+                    } catch (err) {
+                        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+                        existing.push({ produto: produtoText, preco: price });
+                        localStorage.setItem(key, JSON.stringify(existing));
+                    }
+                    // redireciona para a página de pedido como nas outras páginas
+                    window.location.href = 'pedido.html';
+                });
+            });
+
+            // Delegação de evento: captura cliques nos botões dentro do carrossel
+            if (carousel) {
+                carousel.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.pedido-btn');
+                    if (!btn || !carousel.contains(btn)) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const produto = btn.dataset.produto || (btn.closest('.card')?.querySelector('p')?.innerText || '').replace(/R\$\s?\d+[\d\.,]*/, '').trim();
+                    const preco = btn.dataset.preco || (btn.closest('.card')?.querySelector('p')?.innerText.match(/R\$\s?\d+[\d\.,]*/) || [''])[0];
+
+                    console.log('delegated click on pedido-btn', { produto, preco });
+                    handlePedidoClick(produto, preco, 'delegated');
+                });
+            }
+
+            // Função para calcular o quanto scrollar por clique (mais robusta)
+            function getScrollAmount() {
+                if (!carousel || cards.length === 0) return 0;
+                const cardWidth = cards[0].offsetWidth || 0;
+                const computedStyle = window.getComputedStyle(carousel);
+                // tenta obter a propriedade 'gap', cai para 0 se não existir ou for NaN
+                const gapRaw = computedStyle.getPropertyValue('gap') || computedStyle.getPropertyValue('column-gap') || '';
+                const gap = parseFloat(gapRaw) || 0;
+                return cardWidth + gap;
+            }
+
+            // Função para atualizar a visibilidade das setas e dos indicadores
+            function updateCarouselState() {
+                if (!carousel) return;
+                const carouselScrollLeft = carousel.scrollLeft;
+                const carouselScrollWidth = carousel.scrollWidth;
+                const carouselClientWidth = carousel.clientWidth;
+
+                if (prevBtn) prevBtn.disabled = carouselScrollLeft <= 1; // usa margem pequena
+                if (prevBtnMobile) prevBtnMobile.disabled = carouselScrollLeft <= 1;
+
+                if (nextBtn) nextBtn.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+                if (nextBtnMobile) nextBtnMobile.disabled = (carouselScrollLeft + carouselClientWidth) >= (carouselScrollWidth - 5);
+
+                updateIndicators();
+            }
+
+            // Lógica para os indicadores (as "bolinhas")
+            function createIndicators() {
+                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                indicatorsContainer.innerHTML = '';
+
+                const scrollAmountBase = getScrollAmount();
+                if (scrollAmountBase === 0) return;
+
+                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
+                const numPages = Math.ceil(cards.length / cardsPerView);
+
+                for (let i = 0; i < numPages; i++) {
+                    const indicator = document.createElement('button');
+                    indicator.classList.add('indicator');
+                    indicator.dataset.page = i;
+                    indicatorsContainer.appendChild(indicator);
+
+                    indicator.addEventListener('click', (event) => {
+                        const pageIndex = parseInt(event.target.dataset.page, 10);
+                        carousel.scrollTo({
+                            left: pageIndex * cardsPerView * scrollAmountBase,
+                            behavior: 'smooth'
+                        });
+                    });
+                }
+            }
+
+            function updateIndicators() {
+                if (!indicatorsContainer || cards.length === 0 || !carousel) return;
+                if (!indicatorsContainer.children.length) { createIndicators(); }
+
+                const scrollAmountBase = getScrollAmount();
+                if (scrollAmountBase === 0) return;
+
+                const cardsPerView = Math.max(1, Math.floor(carousel.clientWidth / scrollAmountBase));
+                const numPages = Math.ceil(cards.length / cardsPerView);
+
+                // Calcula a página atual baseada na posição do scroll
+                const currentPage = Math.max(0, Math.min(numPages - 1, Math.floor((carousel.scrollLeft + (scrollAmountBase / 2)) / (scrollAmountBase * cardsPerView))));
+
+                Array.from(indicatorsContainer.children).forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentPage);
+                });
+            }
+
+            // Event Listener para as setas (se existirem)
+            if (prevBtn) prevBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+            if (nextBtn) nextBtn.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+
+            if (prevBtnMobile && nextBtnMobile) {
+                prevBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft -= scrollAmount; });
+                nextBtnMobile.addEventListener('click', () => { const scrollAmount = getScrollAmount(); carousel.scrollLeft += scrollAmount; });
+            }
+
+            // Atualiza o estado do carrossel quando ele scrolla (manual ou por seta)
+            if (carousel) carousel.addEventListener('scroll', updateCarouselState);
+
+            // Inicializa o carrossel e os indicadores ao carregar a página e redimensionar
+            window.addEventListener('resize', () => { createIndicators(); updateCarouselState(); });
+
+            // Chama a função inicial ao carregar a página
+            createIndicators();
+            updateCarouselState();
+        });
+     </script>
+ </body>
+ </html>

@@ -1,0 +1,326 @@
+/* GERAIS E FONTES */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff !important; /* Fundo branco na página de consulta */
+    color: #222; /* Cor de texto mais suave */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Garante que ocupa a altura total da viewport */
+    overflow-x: hidden; /* Previne rolagem horizontal desnecessária */
+}
+
+/* CABEÇALHO */
+header {
+    background-color: #002244; /* Azul escuro principal */
+    color: white;
+    padding: 20px 40px; /* Mais padding nas laterais */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
+    flex-wrap: wrap; /* Permite que o conteúdo quebre linha em telas pequenas */
+}
+
+.logo {
+    font-size: 30px; /* Logo maior */
+    font-weight: 700; /* Mais negrito */
+    color: #ffee00; /* Amarelo vibrante */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Sombra para o logo */
+    margin-right: 30px; /* Espaço entre logo e navegação */
+}
+
+/* NAVEGAÇÃO DO CABEÇALHO (sidebar-nav foi usado aqui) */
+.sidebar-nav {
+    display: flex;
+    gap: 25px; /* Mais espaço entre os links */
+    flex-wrap: wrap; /* Permite que os links quebrem linha */
+    justify-content: center; /* Centraliza links em telas menores */
+}
+
+.sidebar-nav a { /* Alterado de 'nav a' para 'sidebar-nav a' para ser mais específico */
+    color: white;
+    text-decoration: none;
+    font-weight: 600; /* Um pouco mais negrito */
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo sutil no hover */
+    color: #ffee00; /* Amarelo no hover */
+    transform: translateY(-2px); /* Pequeno efeito de "levantar" */
+}
+
+/* CONTEÚDO PRINCIPAL - Seção de Agendamento */
+main {
+    flex: 1; /* Ocupa o espaço restante */
+    padding: 40px 20px; /* Mais padding superior/inferior */
+    max-width: 1000px; /* Aumenta a largura máxima para o conteúdo principal */
+    margin: 0 auto;
+    width: 100%; /* Garante que ocupa a largura disponível */
+    box-sizing: border-box; /* Inclui padding na largura */
+}
+
+.appointment-section { /* Renomeado de .consulta */
+    max-width: 600px; /* Largura máxima para a caixa do formulário */
+    margin: 30px auto; /* Centraliza e adiciona margem */
+    background-color: white;
+    padding: 40px; /* Mais padding interno */
+    border-radius: 15px; /* Bordas mais arredondadas */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra mais suave e proeminente */
+    text-align: center;
+    position: relative; /* Para posicionar mensagens de erro/confirmação */
+    overflow: hidden; /* Garante que elementos filhos não transbordem borda arredondada */
+}
+
+.appointment-section h2 {
+    color: #002244;
+    font-size: 30px; /* <-- ESTA É A PROPRIEDADE QUE VOCÊ VAI MUDAR */
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.appointment-section h2::after { /* Underline animado para o título */
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 70px; /* Tamanho do underline */
+    height: 4px;
+    background-color: #ffee00;
+    border-radius: 2px;
+    animation: expandUnderline 1s ease-out forwards;
+}
+
+@keyframes expandUnderline {
+    from { width: 0; }
+    to { width: 70px; }
+}
+
+.section-description {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* ESTILO DO FORMULÁRIO */
+.form-group {
+    margin-bottom: 25px; /* Espaçamento entre grupos de campos */
+    text-align: left; /* Alinha labels à esquerda */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px; /* Espaço entre label e input */
+    font-weight: 600; /* Mais negrito */
+    color: #002244;
+    font-size: 1.05em;
+}
+
+input[type="date"],
+select {
+    width: calc(100% - 24px); /* Ajuste para compensar padding */
+    padding: 12px;
+    border-radius: 8px; /* Bordas mais arredondadas */
+    border: 1px solid #ddd; /* Borda mais suave */
+    font-size: 1em;
+    box-sizing: border-box; /* Inclui padding na largura */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fcfcfc; /* Fundo levemente off-white */
+}
+
+input[type="date"]:focus,
+select:focus {
+    border-color: #002244; /* Borda azul ao focar */
+    box-shadow: 0 0 0 3px rgba(0, 34, 68, 0.2); /* Sombra sutil ao focar */
+    outline: none; /* Remove o contorno padrão do navegador */
+}
+
+/* Estilização para o placeholder do select */
+select option[value=""]:first-child {
+    color: #999;
+}
+select:required:invalid {
+    color: #999; /* Cor do texto quando a opção padrão está selecionada */
+}
+select option {
+    color: #333;
+}
+
+
+button[type="submit"] { /* Mais específico para o botão de submit */
+    width: 100%;
+    padding: 15px; /* Mais padding para o botão */
+    margin-top: 30px; /* Mais espaço antes do botão */
+    background-color: #002244;
+    color: white;
+    font-weight: 700; /* Mais negrito */
+    font-size: 1.1em; /* Fonte maior */
+    border: none; /* Remover borda */
+    border-radius: 8px; /* Bordas arredondadas */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para o botão */
+}
+
+button[type="submit"]:hover {
+    background-color: #001a33;
+    transform: translateY(-2px); /* Efeito de levantar */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensagens de Erro e Confirmação */
+.error-message {
+    color: #e74c3c; /* Vermelho vibrante para erro */
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block; /* Garante que ocupe a linha inteira */
+    text-align: left; /* Alinha o erro à esquerda */
+    font-weight: 500;
+}
+
+.confirmation-message { /* Renomeado de .confirmacao */
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.05em;
+    background-color: #e8f5e9; /* Fundo verde claro */
+    color: #050380; /* Texto verde */
+    border: 1px solid #e6f5a3; /* Borda verde */
+    opacity: 0; /* Começa invisível */
+    transform: translateY(10px); /* Começa um pouco abaixo */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Animação */
+    text-align: center; /* Centraliza o texto */
+}
+
+.confirmation-message.show-message {
+    opacity: 1; /* Torna visível */
+    transform: translateY(0); /* Sobe para a posição original */
+}
+
+/* Estilo para a mensagem de erro no mesmo local da confirmação */
+.confirmation-message.error-message-style {
+    background-color: #ffebee; /* Fundo vermelho claro */
+    color: #c0392b; /* Texto vermelho */
+    border: 1px solid #e74c3c; /* Borda vermelha */
+}
+
+
+/* RODAPÉ */
+footer {
+    background-color: #001a33; /* Azul ainda mais escuro para o rodapé */
+    color: #a0a0a0; /* Cor mais suave para o texto do rodapé */
+    text-align: center;
+    padding: 20px;
+    margin-top: auto; /* Empurra o rodapé para o final da página */
+    font-size: 0.9em;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombra superior */
+}
+
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px 20px;
+    }
+
+    .logo {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .sidebar-nav {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .appointment-section {
+        padding: 25px;
+        margin: 20px auto;
+        border-radius: 10px;
+    }
+
+    .appointment-section h2 {
+        font-size: 30px;
+        margin-bottom: 15px;
+    }
+
+    .section-description {
+        font-size: 1em;
+        margin-bottom: 20px;
+    }
+
+    input[type="date"],
+    select,
+    button[type="submit"] {
+        padding: 10px;
+        font-size: 0.95em;
+    }
+
+    button[type="submit"] {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 24px;
+    }
+
+    .sidebar-nav a {
+        font-size: 0.85em;
+        padding: 6px 10px;
+    }
+
+    .appointment-section {
+        padding: 15px;
+        margin: 15px auto;
+    }
+
+   .appointment-section h2 {
+    color: #002244;
+    font-size: 32px; /* <-- ESTA É A PROPRIEDADE QUE VOCÊ VAI MUDAR */
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    padding-bottom: 15px;
+   }
+
+    .section-description {
+        font-size: 0.9em;
+    }
+
+    label {
+        font-size: 0.9em;
+    }
+
+    input[type="date"],
+    select,
+    button[type="submit"] {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+}

@@ -1,0 +1,109 @@
+<<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Óculos Infantil - Vitaliz</title>
+  <link rel="stylesheet" href="oculos-infantil.css">
+</head>
+<body>
+
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+    <nav>
+      <a href="cadastro.html">Cadastro</a>
+      <a href="inicio.html">Início</a>
+      <a href="oculos-fem.html">Moda Feminina</a>
+      <a href="oculos-masc.html">Moda Masculina</a>
+      <a href="oculos-infantil.html">Moda Infantil</a>
+      <a href="consulta.html">Exame de vista</a>
+      <a href="relogios.html">Relógios</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="produtos">
+      <h2>Armações Infantis</h2>
+
+      <div class="grid-produtos">
+        <div class="produto"><img src="img/infanT1.jpeg"><p class="titulo">Armação Tigor</p><p class="preco">R$ 550,00</p></div>
+        <div class="produto"><img src="img/infanT11.jpg"><p class="titulo">Óculos de sol Lilica</p><p class="preco">R$ 370,00</p></div>
+        <div class="produto"><img src="img/infanT3.jpeg"><p class="titulo">Óculos de sol Tigor</p><p class="preco">R$ 370,00</p></div>
+        <div class="produto"><img src="img/infan-4.jpg"><p class="titulo">Armação azul Lilica</p><p class="preco">R$ 299,00</p></div>
+        <div class="produto"><img src="img/infanT17.png"><p class="titulo">Óculos de sol Tigor</p><p class="preco">R$ 310,00</p></div>
+        <div class="produto"><img src="img/infant05.jpeg"><p class="titulo">Armação unisex Tigor</p><p class="preco">R$ 480,00</p></div>
+        <div class="produto"><img src="img/infanT12.jpg"><p class="titulo">Óculos de sol Lilica</p><p class="preco">R$ 365,00</p></div>
+        <div class="produto"><img src="img/infanT7.jpeg"><p class="titulo">Armação Class infantil</p><p class="preco">R$ 495,00</p></div>
+        <div class="produto"><img src="img/infanT9.jpeg"><p class="titulo">Armação Lilica</p><p class="preco">R$ 410,00</p></div>
+        <div class="produto"><img src="img/infanT15.png"><p class="titulo">Armação Tigor</p><p class="preco">R$ 289,00</p></div>
+        <div class="produto"><img src="img/infanT08.jpeg"><p class="titulo">Armação Lilica</p><p class="preco">R$ 410,00</p></div>
+        <div class="produto"><img src="img/infanT13.jpg"><p class="titulo">Armação Lilica</p><p class="preco">R$ 410,00</p></div>
+        <div class="produto"><img src="img/infanT2.jpeg"><p class="titulo">Óculos de sol Tigor T</p><p class="preco">R$ 299,00</p></div>
+        <div class="produto"><img src="img/infanT14.png"><p class="titulo">Armação infantil rosa</p><p class="preco">R$ 320,00</p></div>
+        <div class="produto"><img src="img/infanT10.jpeg"><p class="titulo">Óculos de sol Lilica</p><p class="preco">R$ 350,00</p></div>
+        <div class="produto"><img src="img/infant4.jpeg"><p class="titulo">Armação Tigor colorida</p><p class="preco">R$ 280,00</p></div>
+        <div class="produto"><img src="img/infan18.jpg"><p class="titulo">Armação Class kids</p><p class="preco">R$ 445,00</p></div>
+        <div class="produto"><img src="img/infan19.jpg"><p class="titulo">Óculos de sol Class infantil</p><p class="preco">R$ 355,00</p></div>
+        <div class="produto"><img src="img/infan20.png"><p class="titulo">Óculos de sol Tigor</p><p class="preco">R$ 399,00</p></div>
+        <div class="produto"><img src="img/infan21.avif"><p class="titulo">Óculos de sol Lilica</p><p class="preco">R$ 450,00</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeBtn" class="close">&times;</span>
+      <img id="modal-img" src="" alt="Produto ampliado">
+      <p id="modal-title"></p>
+      <p id="modal-price"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const produtos = document.querySelectorAll(".produto");
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalTitle = document.getElementById("modal-title");
+      const modalPrice = document.getElementById("modal-price");
+      const closeBtn = document.getElementById("closeBtn");
+
+      produtos.forEach(produto => {
+        produto.addEventListener("click", () => {
+          const img = produto.querySelector("img").src;
+          const titulo = produto.querySelector(".titulo").innerText;
+          const preco = produto.querySelector(".preco").innerText;
+
+          modalImg.src = img;
+          modalTitle.innerText = titulo;
+          modalPrice.innerText = preco;
+          modal.classList.remove("hidden");
+        });
+
+        // Adiciona botão 'Fazer pedido' sobre a imagem
+        const pedidoBtn = document.createElement('a');
+        pedidoBtn.href = 'pedido.html';
+        pedidoBtn.className = 'pedido-btn';
+        pedidoBtn.textContent = 'Fazer pedido';
+        produto.style.position = 'relative';
+        produto.appendChild(pedidoBtn);
+      });
+
+      closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

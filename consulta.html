@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Agendamento de Exame de Vista - Vitaliz</title>
+  <link rel="stylesheet" href="consulta.css">
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+    <nav class="sidebar-nav">
+        <a href="cadastro.html">Cadastro</a>
+        <a href="inicio.html">Início</a>
+        <a href="oculos-fem.html">Moda Feminina</a>
+        <a href="oculos-masc.html">Moda Masculina</a>
+        <a href="oculos-infantil.html">Moda Infantil</a>
+        <a href="consulta.html">Exame de vista</a>
+        <a href="relogios.html">Relógios</a>
+        <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="appointment-section"> <h2>Agende seu Exame de Vista</h2>
+      <p class="section-description">Selecione a quarta-feira e o horário disponíveis para o seu exame. Sua visão é nossa prioridade!</p>
+
+      <form id="appointmentForm"> <div class="form-group">
+          <label for="appointment-date">Escolha a data:</label>
+          <input type="date" id="appointment-date" name="data" required>
+          <span class="error-message" id="date-error"></span> </div>
+
+        <div class="form-group">
+          <label for="appointment-time">Escolha o horário:</label>
+          <select id="appointment-time" name="horario" required>
+            <option value="">Selecione o horário</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+          </select>
+          <span class="error-message" id="time-error"></span> </div>
+
+        <button type="submit" id="submit-button">Agendar Consulta</button>
+      </form>
+
+      <div id="confirmation-message" class="confirmation-message"></div> </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+  <script>
+    // Este script será aprimorado na próxima etapa
+    document.addEventListener('DOMContentLoaded', () => {
+        const dataInput = document.getElementById('appointment-date');
+        const horarioSelect = document.getElementById('appointment-time');
+        const form = document.getElementById('appointmentForm');
+        const confirmacaoDiv = document.getElementById('confirmation-message');
+        const dateErrorSpan = document.getElementById('date-error');
+        const timeErrorSpan = document.getElementById('time-error');
+        const submitButton = document.getElementById('submit-button');
+
+        function validateDate() {
+            const dataSelecionada = new Date(dataInput.value + 'T00:00:00'); // Adiciona T00:00:00 para evitar problemas de fuso horário
+            const diaSemana = dataSelecionada.getUTCDay(); // 3 = quarta-feira
+
+            if (dataInput.value === "") {
+                dateErrorSpan.textContent = "Por favor, selecione uma data.";
+                return false;
+            } else if (diaSemana !== 3) {
+                dateErrorSpan.textContent = "Só é possível agendar para quartas-feiras!";
+                dataInput.value = ''; // Limpa a data inválida
+                return false;
+            } else {
+                dateErrorSpan.textContent = ""; // Limpa a mensagem de erro
+                return true;
+            }
+        }
+
+        function validateTime() {
+            if (horarioSelect.value === "") {
+                timeErrorSpan.textContent = "Por favor, selecione um horário.";
+                return false;
+            } else {
+                timeErrorSpan.textContent = "";
+                return true;
+            }
+        }
+
+        dataInput.addEventListener('change', validateDate); // Usa 'change' para validar ao mudar a data
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const isDateValid = validateDate();
+            const isTimeValid = validateTime();
+
+            if (isDateValid && isTimeValid) {
+                const data = dataInput.value;
+                const horario = horarioSelect.value;
+                
+                confirmacaoDiv.innerHTML = `
+                    <p><strong>Sua consulta foi agendada com sucesso!</strong></p>
+                    <p><strong>Data:</strong> ${data} às ${horario}</p>
+                    <p>Aguardamos você na Ótica Vitaliz!</p>
+                `;
+                confirmacaoDiv.classList.add('show-message'); // Adiciona classe para exibir
+                confirmacaoDiv.classList.remove('error-message-style'); // Garante que não tenha estilo de erro
+                
+                // Opcional: Limpar o formulário após o agendamento
+                form.reset();
+                dateErrorSpan.textContent = "";
+                timeErrorSpan.textContent = "";
+
+                // Opcional: Esconder a mensagem após alguns segundos
+                setTimeout(() => {
+                    confirmacaoDiv.classList.remove('show-message');
+                    confirmacaoDiv.innerHTML = ''; // Limpa o conteúdo
+                }, 7000); // Mensagem visível por 7 segundos
+
+            } else {
+                 confirmacaoDiv.innerHTML = `<p>Por favor, corrija os erros no formulário.</p>`;
+                 confirmacaoDiv.classList.add('error-message-style'); // Adiciona classe para estilo de erro
+                 confirmacaoDiv.classList.add('show-message'); // Exibe a mensagem de erro
+
+                 setTimeout(() => {
+                    confirmacaoDiv.classList.remove('show-message');
+                    confirmacaoDiv.innerHTML = '';
+                 }, 5000);
+            }
+        });
+
+        // Chamada inicial para garantir que as mensagens de erro estejam limpas
+        validateDate();
+        validateTime();
+    });
+  </script>
+
+</body>
+</html>

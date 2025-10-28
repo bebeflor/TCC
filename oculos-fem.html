@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Produtos - Vitaliz</title>
+  <link rel="stylesheet" href="oculos-fem.css">
+</head>
+<body>
+
+  <header>
+    <h1 class="logo">Vitaliz</h1>
+    <nav class="sidebar-nav">
+      <a href="cadastro.html">Cadastro</a>
+      <a href="inicio.html">Início</a>
+      <a href="oculos-fem.html">Moda Feminina</a>
+      <a href="oculos-masc.html">Moda Masculina</a>
+      <a href="oculos-infantil.html">Moda Infantil</a>
+      <a href="consulta.html">Exame de vista</a>
+      <a href="relogios.html">Relógios</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="produtos">
+      <h2>Armações Femininas</h2>
+
+ <div class="grid-produtos">
+  <div class="produto"><img src="img/armaçao1.png"><p class="titulo">Óculos de sol Ideal</p><p class="preco">R$ 499,90</p></div>
+  <div class="produto"><img src="img/armaçao2.png"><p class="titulo">Armação Ana Hickmann</p><p class="preco">R$ 568,00</p></div>
+  <div class="produto"><img src="img/armaçao3.png"><p class="titulo">Óculos de sol Dudalina</p><p class="preco">R$ 756,90</p></div>
+  <div class="produto"><img src="img/armacao19.jpeg"><p class="titulo">Armação Dudalina</p><p class="preco">R$ 620,00</p></div>
+  <div class="produto"><img src="img/armaçao8.png"><p class="titulo">Armação Maria Valentina</p><p class="preco">R$ 850,00</p></div>
+  <div class="produto"><img src="img/armaçao05.png"><p class="titulo">Óculos de sol Sabrina Sato</p><p class="preco">R$ 980,00</p></div>
+  <div class="produto"><img src="img/armaçao6.png"><p class="titulo">Óculos de sol Sabrina Sato</p><p class="preco">R$ 700,00</p></div>
+  <div class="produto"><img src="img/armaçao7.png"><p class="titulo">Óculos de sol Maria Valentina</p><p class="preco">R$ 650,00</p></div>
+  <div class="produto"><img src="img/armacao17.jpeg"><p class="titulo">Armação Gucci</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armaçao10.png"><p class="titulo">Armação Cavalera</p><p class="preco">R$ 500,00</p></div>
+  <div class="produto"><img src="img/armaçao11.png"><p class="titulo">Óculos de sol Ideal</p><p class="preco">R$ 450,00</p></div>
+  <div class="produto"><img src="img/armaçao12.png"><p class="titulo">Armação Platini</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armacao13.jpeg"><p class="titulo">Óculos de sol Next</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armacao14.jpeg"><p class="titulo">Armação Class</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armacao15.jpeg"><p class="titulo">Óculos de sol Ana Hickmann</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armacao16.png"><p class="titulo">Óculos de sol Ana Hickmann</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armacao21.png"><p class="titulo">Armação Gucci</p><p class="preco">R$ 680,00</p></div>
+  <div class="produto"><img src="img/armacao18.jpeg"><p class="titulo">Óculos de sol Next</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armaçao9.png"><p class="titulo">Óculos de sol Ana Hickmann</p><p class="preco">R$ 890,00</p></div>
+  <div class="produto"><img src="img/armaçao4.png"><p class="titulo">Óculos de sol Vogue</p><p class="preco">R$ 890,00</p></div>
+</div>
+
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Ótica Vitaliz - Todos os direitos reservados
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeBtn">&times;</span>
+      <img id="modal-img" src="" alt="Produto ampliado">
+      <p id="modal-title"></p>
+      <p id="modal-price"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const produtos = document.querySelectorAll(".produto");
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalTitle = document.getElementById("modal-title");
+      const modalPrice = document.getElementById("modal-price");
+      const closeBtn = document.getElementById("closeBtn");
+
+      produtos.forEach(produto => {
+        produto.addEventListener("click", () => {
+          const img = produto.querySelector("img").src;
+          const titulo = produto.querySelector(".titulo").innerText;
+          const preco = produto.querySelector(".preco").innerText;
+
+          modalImg.src = img;
+          modalTitle.innerText = titulo;
+          modalPrice.innerText = preco;
+          modal.classList.remove("hidden");
+        });
+      
+        // Adiciona botão 'Fazer pedido' sobre a imagem
+        const pedidoBtn = document.createElement('a');
+        pedidoBtn.href = 'pedido.html';
+        pedidoBtn.className = 'pedido-btn';
+        pedidoBtn.textContent = 'Fazer pedido';
+        produto.style.position = 'relative';
+        produto.appendChild(pedidoBtn);
+      });
+
+      closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

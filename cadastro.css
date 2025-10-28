@@ -1,0 +1,286 @@
+/* --- 1. Global Reset & Base Styles --- */
+* {
+  /* box-sizing: border-box; ensures padding and border are included in the element's total width and height */
+  box-sizing: border-box;
+  /* margin: 0; removes default margins from all elements */
+  margin: 0;
+  /* padding: 0; removes default paddings from all elements */
+  padding: 0;
+  /* Sets a default font-family for all elements. This is good for consistency. */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* --- 2. CSS Variables (Custom Properties) --- */
+/* :root pseudo-class allows defining global CSS variables.
+   This makes it easy to manage consistent colors, fonts, and spacings throughout your project. */
+:root {
+  --primary-color: #002244;           /* Dark Blue: Main brand color for backgrounds, buttons */
+  --secondary-color: #003366;          /* Slightly lighter Dark Blue: For gradients, secondary elements */
+  --accent-color: #FFD700;            /* Gold/Yellow: For highlights, titles, focus states */
+  --text-light: #fff;                /* White: For text on dark backgrounds */
+  --text-dark: #333;                 /* Dark Gray: For text on light backgrounds (inside container) */
+  --bg-container: #fff;              /* White: Background for main content containers */
+  --input-bg: #f0f0f0;                /* Light Gray: Background for input fields */
+  --input-border-default: #ccc;      /* Light Gray: Default border for inputs */
+  --input-border-focus: var(--accent-color); /* Uses accent color for focus border */
+  --shadow-color: rgba(0, 0, 0, 0.2);/* Black with transparency: For box shadows */
+
+  --border-radius-small: 8px;        /* Standard border-radius for small elements (inputs, buttons) */
+  --border-radius-large: 12px;       /* Border-radius for larger containers */
+
+  --spacing-extra-small: 4px;        /* Extra small spacing for subtle gaps (e.g., label to input) */
+  --spacing-small: 16px;             /* Small spacing (e.g., gap between form elements) */
+  --spacing-medium: 25px;            /* Medium spacing (e.g., margin below titles) */
+  --spacing-large: 40px;             /* Large spacing (e.g., container padding) */
+}
+
+/* --- 3. Body Styles --- */
+body {
+  /* min-height: 100vh; ensures the body covers the full viewport height but can expand if content is larger */
+  min-height: 100vh;
+  /* Using CSS variables for background gradient for consistency */
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  /* Flexbox for centering the .container horizontally and vertically */
+  display: flex;
+  align-items: center;    /* Centers items vertically in the flex container */
+  justify-content: center; /* Centers items horizontally in the flex container */
+  /* Sets the default text color for elements directly in the body (e.g., outside the container) */
+  color: var(--text-light);
+  /* Adds padding to the body to prevent the container from touching screen edges on very small devices */
+  padding: var(--spacing-medium);
+}
+
+/* --- 4. Container Styles --- */
+.container {
+  background: var(--bg-container);     /* Uses variable for background color */
+  padding: var(--spacing-large);       /* Uses variable for padding */
+  border-radius: var(--border-radius-large); /* Uses variable for border-radius */
+  width: 90%;                          /* Takes 90% of available width */
+  max-width: 450px;                    /* Increased max-width slightly for better aesthetics */
+  box-shadow: 0 10px 25px var(--shadow-color); /* Uses variable for box-shadow */
+  text-align: center;                  /* Centers inline content like text */
+  /* Sets the text color for all content inside the container to a darker shade for contrast on white background */
+  color: var(--text-dark);
+}
+
+/* --- 5. Header Section within Container --- */
+/* Targets the header element we added in the HTML, for general spacing */
+.container header {
+  margin-bottom: var(--spacing-medium);
+}
+
+/* --- 6. Headings --- */
+.container h1 {
+  color: var(--accent-color);     /* Uses accent color for the main title */
+  margin-bottom: 10px;            /* Reduced margin as H2 follows */
+  font-size: 36px;                /* Slightly larger for more impact */
+  letter-spacing: 1px;            /* Adds a subtle letter spacing */
+}
+
+/* Styles for the new H2 ("Crie sua conta") */
+.container h2 {
+    color: var(--primary-color);  /* Uses primary color for the subtitle */
+    font-size: 24px;              /* Appropriate size for a subtitle */
+    margin-bottom: 20px;          /* Space between subtitle and form */
+}
+
+/* --- 7. Form Section --- */
+/* Styles for the <section> wrapping the form, if you use it for layout */
+.form-section {
+    margin-bottom: var(--spacing-medium); /* Provides space below the form section */
+}
+
+/* --- 8. Form Styles --- */
+form {
+  display: flex;
+  flex-direction: column; /* Stacks form elements vertically */
+  /* gap property is used to create space between flex items, simplifying margin management */
+  gap: var(--spacing-small); /* Consistent spacing between labels/inputs/buttons */
+}
+
+/* --- 9. Labels Styles --- */
+label {
+  text-align: left;       /* Aligns labels to the left */
+  font-size: 15px;
+  font-weight: 600;       /* Makes labels slightly bolder for better readability */
+  margin-bottom: var(--spacing-extra-small); /* Small space between label and input */
+  display: block;         /* Ensures label takes full width, allowing text-align to work */
+}
+
+/* --- 10. Input Fields Styles --- */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  /* margin-bottom is removed here because 'gap' on the form handles the spacing */
+  border: 1px solid var(--input-border-default); /* Added a subtle default border */
+  border-radius: var(--border-radius-small);   /* Uses variable for border-radius */
+  background: var(--input-bg);                 /* Uses variable for background */
+  font-size: 16px;
+  /* Smooth transition for border color, background, and added box-shadow */
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  border-color: var(--input-border-focus); /* Uses accent color for border on focus */
+  outline: none;                            /* Removes default browser outline */
+  background: #e9e9e9;                      /* Slightly darker background on focus */
+  /* Adds a subtle yellow glow effect on focus for better UX */
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+}
+
+/* --- 11. Button Styles --- */
+button {
+  width: 100%;
+  padding: 15px;                            /* Slightly increased padding for a taller button */
+  background-color: var(--primary-color);   /* Uses primary brand color for button background */
+  color: var(--text-light);                 /* White text on button */
+  border: none;
+  border-radius: var(--border-radius-small);/* Uses variable for border-radius */
+  font-size: 17px;                          /* Slightly larger font for prominence */
+  font-weight: 600;                         /* Bolder text for impact */
+  cursor: pointer;                          /* Indicates clickable element */
+  /* Smooth transition for background color and added transform for hover/active effects */
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin-top: 10px; /* Provides a small space above the button, if needed */
+}
+
+button:hover {
+  background-color: #001a33; /* Darker blue on hover */
+  transform: translateY(-2px); /* Subtle lift effect on hover */
+}
+
+button:active {
+  transform: translateY(0);  /* Returns to original position on click for "pressed" effect */
+}
+
+/* --- 12. Login Link Styles --- */
+/* New class for the paragraph containing the link, for overall spacing */
+.link-area {
+    margin-top: var(--spacing-medium); /* Space above the link paragraph */
+    font-size: 15px;
+}
+
+/* Styles for the actual anchor tag within the link-area */
+.link-area .link {
+  color: var(--primary-color);      /* Uses primary color for the link text */
+  text-decoration: none;            /* Removes default underline */
+  transition: color 0.2s ease, text-decoration 0.2s ease; /* Smooth transition for hover effects */
+  font-weight: 600;                 /* Makes the link text bolder */
+}
+
+.link-area .link:hover {
+  text-decoration: underline;      /* Adds underline on hover */
+  color: var(--secondary-color);   /* Slightly changes color on hover for visual feedback */
+}
+
+/* --- 13. Responsive Adjustments (Media Query) --- */
+@media (max-width: 480px) {
+  .container {
+    padding: var(--spacing-medium); /* Reduce padding on very small screens */
+    border-radius: 8px;             /* Slightly smaller border-radius */
+  }
+
+  .container h1 {
+    font-size: 28px;
+  }
+
+  .container h2 {
+    font-size: 20px;
+  }
+
+  input, button {
+    padding: 12px;                  /* Slightly smaller padding for inputs and buttons */
+    font-size: 15px;
+  }
+}
+
+/* Ajustes visuais específicos para a página de cadastro */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fafafa; /* leve off-white para contraste */
+  color: #222;
+}
+
+.container {
+  background: var(--bg-container);
+  padding: 32px;
+  border-radius: 14px;
+  width: 360px;              /* largura fixa mais próxima ao mock */
+  margin: 40px;              /* posiciona com espaço a partir da borda esquerda */
+  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+  text-align: left;
+  color: var(--text-dark);
+}
+
+.container h1 {
+  color: var(--accent-color);
+  margin: 0 0 18px 0;
+  font-size: 40px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+form {
+  display: block;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--input-border-default);
+  border-radius: 10px;
+  background: var(--input-bg);
+  font-size: 15px;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+input:focus {
+  border-color: var(--input-border-focus);
+  box-shadow: 0 6px 18px rgba(255,215,0,0.08);
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+button:hover { background-color: #001a33; transform: translateY(-2px);} 
+
+.link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: #6b2b8a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .container { width: calc(100% - 32px); margin: 20px; padding: 20px; }
+  .container h1 { font-size: 34px; }
+  input, button { font-size: 15px; padding: 12px; }
+}
